@@ -1,0 +1,77 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Expo
+.expo/
+.expo-shared/
+web-build/
+dist/
+
+# Build files
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IDE - JetBrains (WebStorm, etc)
+.idea/
+*.iml
+
+# Metro
+.metro-health-check*
+/metro-cache
+
+# Optional: Temporary files
+*.swp
+*.swo
+*~
+
+# Project specific
+project-structure.txt
+
+# Optional: If you want to ignore certain image backups or duplicates
+src/assets/*@2x.png
+src/assets/*@3x.png
+# Remove the above two lines if you want to track your image assets
+
+# Optional: Local build files
+/ios/build/
+/android/build/
+/android/app/build/
+/android/gradle/
+/android/.gradle/
+/android/local.properties
+
+# Keep fonts and essential assets
+!src/ass
