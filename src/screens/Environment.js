@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Text, StyleSheet, View, ScrollView, ImageBackground } from "react-native";
-import { Color, FontFamily, FontSize } from 'GlobalStyles'; // GlobalStyles without 'src' because of the alias
+import { Text, StyleSheet, View, ScrollView, ImageBackground, TouchableOpacity } from "react-native";
+import { Color, FontFamily, FontSize, Border } from 'GlobalStyles'; // GlobalStyles without 'src' because of the alias
 import SwipeableScreenWrapper from 'components/SwipeableScreenWrapper'; // Using alias without 'src'
 
 // Import your image here
-const backgroundImage = require('assets/climateback.jpg'); // Correct alias path for assets
+const backgroundImage = require('assets/howtestpic2.jpg'); // Correct alias path for assets
 
 const Environment = ({ navigation }) => {
   return (
@@ -28,20 +28,31 @@ const Environment = ({ navigation }) => {
             <Text style={[styles.thisAssessesThe, styles.climateTransform]}>
               {`This assesses the environmental footprint of a company's products and operations. We consider factors like:`}
             </Text>
-            <View style={styles.listContainer}>
-              <Text style={styles.bullet}>•</Text>
-              <Text style={styles.listItem}>Emissions</Text>
-            </View>
-            <View style={styles.listContainer}>
-              <Text style={styles.bullet}>•</Text>
-              <Text style={styles.listItem}>Waste Management</Text>
-            </View>
-            <View style={styles.listContainer}>
-              <Text style={styles.bullet}>•</Text>
-              <Text style={styles.listItem}>Sustainable Materials</Text>
+
+            {/* Left-aligned and independent list items */}
+            <View style={styles.leftAlignedListContainer}>
+              <Text style={[styles.listItem, styles.customLineSpacing]}>Emissions</Text>
+              <Text style={[styles.listItem, styles.customLineSpacing]}>Waste Management</Text>
+              <Text style={[styles.listItem, styles.customLineSpacing]}>Sustainable Materials</Text>
             </View>
           </View>
         </ScrollView>
+
+        {/* Back Button */}
+        <TouchableOpacity 
+          style={[styles.navButton, styles.navButtonLeft]}
+          onPress={() => navigation.goBack()} // Function to go back
+        >
+          <Text style={styles.navButtonText}>←</Text>
+        </TouchableOpacity>
+
+        {/* Forward Button */}
+        <TouchableOpacity 
+          style={[styles.navButton, styles.navButtonRight]}
+          onPress={() => navigation.navigate('Labor')} // Replace 'Profile' with the actual screen
+        >
+          <Text style={styles.navButtonText}>→</Text>
+        </TouchableOpacity>
       </ImageBackground>
     </SwipeableScreenWrapper>
   );
@@ -53,7 +64,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject, // Covers the entire screen
-    backgroundColor: 'rgba(0, 0, 0, 0.55)', // Semi-transparent black with 30% opacity
+    backgroundColor: 'rgba(0, 0, 60, 0.5)', // Semi-transparent black with 30% opacity
   },
   scrollViewContent: {
     flexGrow: 1,
@@ -76,26 +87,58 @@ const styles = StyleSheet.create({
     marginBottom: 20, // Space between title and content
   },
   thisAssessesThe: {
-    fontSize: FontSize.size_16xl,
-    fontFamily: FontFamily.maliMedium,
+    fontSize: 37,
+    fontFamily: FontFamily.poppinsmedium,
     color: Color.white,
     lineHeight: 45, // Line height for better readability
     marginBottom: 20, // Space between paragraph and list items
   },
-  listContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10, // Space between each list item
+  leftAlignedListContainer: {
+    marginTop: 10, // Space between list and the text above
+    marginLeft: 0, // Align items to the left
+  },
+  customLineSpacing: {
+    lineHeight: 60, // Adjust line height for better spacing between the list items
+    marginBottom: 20, // Space between each list item
   },
   listItem: {
     fontSize: 64,
     fontFamily: FontFamily.reenieBeanie,
     color: Color.white,
-    lineHeight: 65, // Increase line height for better spacing
-    marginBottom: 10, // Space between paragraph and list items
+    textAlign: 'left', // Align text to the left
   },
   environment: {
     paddingTop: 60, // Padding at the top of the screen for content
+  },
+  // Navigation Button styles
+  navButton: {
+    position: 'absolute',
+    bottom: 40,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  navButtonLeft: {
+    left: 30, // Positioning for the back button on the left
+  },
+  navButtonRight: {
+    right: 30, // Positioning for the forward button on the right
+  },
+  navButtonText: {
+    color: Color.white,
+    fontSize: 20,
+    fontFamily: FontFamily.ralewayExtraBold,
   },
 });
 

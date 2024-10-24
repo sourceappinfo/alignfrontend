@@ -3,7 +3,7 @@ import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react
 import { Color, FontFamily, FontSize } from "GlobalStyles";
 import { useNavigation } from '@react-navigation/native';
 
-const backgroundImage = require('assets/Howbackground.jpg');
+const backgroundImage = require('assets/howgreenpic.jpg');
 
 const How = () => {
   const navigation = useNavigation();
@@ -14,7 +14,11 @@ const How = () => {
         source={backgroundImage} 
         style={styles.backgroundImage} 
         resizeMode="cover"
+        imageStyle={styles.imageStyle} // Adjust image style for stretching
       >
+        {/* Light Overlay */}
+        <View style={styles.overlay} />
+
         <View style={styles.how}>
           {/* HOW Title */}
           <Text style={styles.howTitle}>HOW</Text>
@@ -56,7 +60,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   backgroundImage: {
-    flex: 1, 
+    flex: 1,
+  },
+  imageStyle: {
+    height: '120%', // Stretch the image vertically
+  },
+  // Light overlay with opacity
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 40, 50, .2)', // Light overlay with 20% opacity
   },
   how: {
     flex: 1,
@@ -75,15 +87,17 @@ const styles = StyleSheet.create({
   },
   scoringSystemText: {
     fontSize: 35, 
-    fontFamily: FontFamily.maliRegular, 
+    fontFamily: FontFamily.poppinsMedium, 
     color: Color.white, 
-    lineHeight: 60, 
   },
   pillarText: {
     fontSize: 60, 
     fontFamily: FontFamily.reenieBeanie, 
     color: Color.white, 
     marginBottom: 60, 
+    lineHeight: 60,
+    alignItems: 'center', // Center the pillar text horizontally
+    marginBottom: 60,
   },
   navButton: {
     position: 'absolute',

@@ -1,48 +1,85 @@
 import * as React from "react";
-import { Image } from "expo-image";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, TouchableOpacity, Text, StyleSheet, View, ImageBackground } from "react-native";
 import { Padding, Color, Border, FontFamily, FontSize } from "GlobalStyles"; // Corrected path
+import { useNavigation } from '@react-navigation/native'; // Import navigation hook
+
+const backgroundImage = require('assets/profilebackground.jpg'); // Add your background image here
 
 const Profile = () => {
+  const navigation = useNavigation(); // Navigation hook to handle navigation
+
   return (
-    <View style={styles.profile}>
-      <Image
-        style={styles.profileChild}
-        contentFit="cover"
-        source={require("assets/profileicon.png")}  // Corrected path
-      />
-      <View style={[styles.searchbutton, styles.searchbuttonPosition]}>
-        <Text style={[styles.emmanuelOyiboke, styles.emmanuelOyibokeTypo]}>
-          EMMANUEL OYIBOKE
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage} resizeMode="cover">
+      {/* Dark Overlay for Contrast */}
+      <View style={styles.overlay} />
+
+      <View style={styles.profile}>
+        <Image
+          style={styles.profileChild}
+          contentFit="cover"
+          source={require("assets/profileicon.png")}  // Corrected path
+        />
+        <View style={[styles.searchbutton, styles.searchbuttonPosition]}>
+          <Text style={[styles.emmanuelOyiboke, styles.emmanuelOyibokeTypo]}>
+            EMMANUEL OYIBOKE
+          </Text>
+        </View>
+        <Text style={[styles.yourName, styles.yourNameLayout]}>Your Name</Text>
+        <View style={styles.profileItem} />
+        {/* Softened Save Now Button */}
+        <TouchableOpacity style={styles.saveNowButton}>
+          <Text style={styles.saveNowText}>Save Now</Text>
+        </TouchableOpacity>
+        <View style={[styles.searchbutton1, styles.searchbuttonPosition]}>
+          <Text
+            style={[styles.emmanueloyibokegmailcom, styles.emmanuelOyibokeTypo]}
+          >
+            emmanueloyiboke@gmail.com
+          </Text>
+        </View>
+        <Text style={[styles.emailAddress, styles.yourNameLayout]}>
+          Email Address
         </Text>
-      </View>
-      <Text style={[styles.yourName, styles.yourNameLayout]}>Your Name</Text>
-      <View style={styles.profileItem} />
-      <Text style={[styles.saveNow, styles.saveNowTypo]}>Save Now</Text>
-      <View style={[styles.searchbutton1, styles.searchbuttonPosition]}>
-        <Text
-          style={[styles.emmanueloyibokegmailcom, styles.emmanuelOyibokeTypo]}
+        <Image
+          style={styles.eyeIcon}
+          contentFit="cover"
+          source={require("assets/eye.png")}  // Corrected path
+        />
+        <Text style={[styles.password, styles.passwordTypo]}>Password</Text>
+        <Text style={[styles.recoveryPassword, styles.passwordTypo]}>
+          Recovery Password
+        </Text>
+
+        {/* Navigation Buttons */}
+        <TouchableOpacity 
+          style={[styles.navButton, styles.navButtonLeft]} 
+          onPress={() => navigation.goBack()} // Back button functionality
         >
-          emmanueloyiboke@gmail.com
-        </Text>
+          <Text style={styles.navButtonText}>←</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.navButton, styles.navButtonRight]} 
+          onPress={() => navigation.navigate('SideMenu')} // Forward button functionality
+        >
+          <Text style={styles.navButtonText}>→</Text>
+        </TouchableOpacity>
       </View>
-      <Text style={[styles.emailAddress, styles.yourNameLayout]}>
-        Email Address
-      </Text>
-      <Image
-        style={styles.eyeIcon}
-        contentFit="cover"
-        source={require("assets/eye.png")}  // Corrected path
-      />
-      <Text style={[styles.password, styles.passwordTypo]}>Password</Text>
-      <Text style={[styles.recoveryPassword, styles.passwordTypo]}>
-        Recovery Password
-      </Text>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  // Added overlay for better text visibility
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0)', // 40% opacity dark overlay
+  },
   searchbuttonPosition: {
     paddingBottom: Padding.p_base,
     paddingRight: Padding.p_38xl,
@@ -69,11 +106,12 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     textAlign: "left",
   },
-  saveNowTypo: {
+  saveNowText: {
     color: Color.white,
     fontFamily: FontFamily.ralewaySemiBold,
     fontWeight: "600",
-    position: "absolute",
+    fontSize: FontSize.size_xl,
+    textAlign: "center",
   },
   passwordTypo: {
     fontWeight: "800",
@@ -117,15 +155,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#13557b",
     position: "absolute",
   },
-  saveNow: {
-    height: "2.62%",
-    width: "24.09%",
-    top: "51.67%",
-    left: "38.18%",
-    fontSize: FontSize.size_xl,
-    lineHeight: 22,
-    textAlign: "left",
-    textTransform: "capitalize",
+  saveNowButton: {
+    height: 50,
+    width: 150,
+    top: "52%",
+    left: "37%",
+    borderRadius: 30,
+    backgroundColor: 'rgba(19, 85, 123, 0.7)', // Softer background with opacity
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
   },
   emmanueloyibokegmailcom: {
     textTransform: "lowercase",
@@ -185,6 +225,36 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: 956,
+  },
+  // Navigation Button styles
+  navButton: {
+    position: 'absolute',
+    bottom: 40,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  navButtonLeft: {
+    left: 30,
+  },
+  navButtonRight: {
+    right: 30,
+  },
+  navButtonText: {
+    color: Color.white,
+    fontSize: 20,
+    fontFamily: FontFamily.ralewayExtraBold,
   },
 });
 

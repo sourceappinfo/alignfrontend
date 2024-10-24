@@ -3,7 +3,7 @@ import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react
 import { Color, FontSize, FontFamily } from "GlobalStyles";
 import { useNavigation } from '@react-navigation/native';
 
-const backgroundImage = require('assets/frontoceanpic.jpg');
+const backgroundImage = require('assets/intropic4.jpg');
 
 const Intro = () => {
   const navigation = useNavigation();
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   frameTextContainer: {
     position: 'absolute',
-    top: '40%',
+    top: '25%',
     left: 0,
     right: 0,
     alignItems: 'center',
@@ -92,23 +92,23 @@ const styles = StyleSheet.create({
     marginBottom: 80, // Increased margin for more space between the sections
   },
   empowersConsumersWith: {
-    fontSize: 25,
+    fontSize: 31,
     fontFamily: FontFamily.poppinsMedium,
     color: Color.white,
     textAlign: 'center',
-    lineHeight: 50,
-    marginBottom: 30,  // Added margin to create space below the text
+    lineHeight: 70,
+    marginBottom: -50,  // Added margin to create space below the text
   },
   frame1: {
-    marginBottom: 100, // Increased margin for more space below
+    marginBottom: 300, // Increased margin for more space below
   },
   sustainableEthicalText: {
-    fontSize: 50,
+    fontSize: 70,
     fontFamily: FontFamily.reenieBeanie,
     color: Color.white,
     textAlign: 'center',
     fontWeight: 'bold',
-    marginBottom: 40, // Added margin for space between this text and the next element
+    marginBottom: 70, // Added margin for space between this text and the next element
   },
   navButton: {
     position: 'absolute',

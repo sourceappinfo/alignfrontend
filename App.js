@@ -3,21 +3,34 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useFonts } from "expo-font";
-import ProductData from "screens/ProductData";  // Using alias for screens
-import Profile from "screens/Profile";  // Using alias for screens
-import SignIn from "screens/SignIn";  // Using alias for screens
-import Labor from "screens/Labor";  // Using alias for screens
-import How from "screens/How";  // Using alias for screens
-import Environment from "screens/Environment";  // Using alias for screens
-import Intro from "screens/Intro";  // Using alias for screens
-import Survey from "screens/Survey";  // Using alias for screens
-import ForgotPassword1 from "screens/ForgotPassword1";  // Using alias for screens
-import RegisterAccount from "screens/RegisterAccount";  // Using alias for screens
-import Search from "screens/Search";  // Using alias for screens
-import ForgotPassword from "screens/ForgotPassword";  // Using alias for screens
-import CorporateGovernance from "screens/CorporateGovernance";  // Using alias for screens
-import SideMenu from "screens/SideMenu";  // Using alias for screens
-import Verification from "screens/Verification";  // Using alias for screens
+
+// Import screens
+import ProductData from "screens/ProductData";
+import Profile from "screens/Profile";
+import SignIn from "screens/SignIn";
+import Labor from "screens/Labor";
+import How from "screens/How";
+import Environment from "screens/Environment";
+import Intro from "screens/Intro";
+import Survey from "screens/Survey";
+import ForgotPassword1 from "screens/ForgotPassword1";
+import RegisterAccount from "screens/RegisterAccount";
+import Search from "screens/Search";
+import ForgotPassword from "screens/ForgotPassword";
+import CorporateGovernance from "screens/CorporateGovernance";
+import SideMenu from "screens/SideMenu";
+import Verification from "screens/Verification";
+import Favorites from "screens/Favorites";  
+import Notifications from "screens/Notifications";  
+import Settings from "screens/Settings";  
+import Recommendations from "screens/Recommendations";  
+
+// Newly added screens
+import EcoFashion from "screens/EcoFashion";  
+import GreenTech from "screens/GreenTech";  
+import FairTrade from "screens/FairTrade";  
+import HumanRights from "screens/HumanRights";  
+import EthicalGadgets from "screens/EthicalGadgets"; 
 
 const Stack = createNativeStackNavigator();
 
@@ -25,7 +38,7 @@ const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
 
   const [fontsLoaded, error] = useFonts({
-    "Poppins-Regular": require("assets/fonts/Poppins-Regular.ttf"),  // Using alias for assets
+    "Poppins-Regular": require("assets/fonts/Poppins-Regular.ttf"),  
     "Poppins-Medium": require("assets/fonts/Poppins-Medium.ttf"),
     "Poppins-SemiBold": require("assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-ExtraBold": require("assets/fonts/Poppins-ExtraBold.ttf"),
@@ -62,6 +75,7 @@ const App = () => {
               gestureEnabled: false, // Disable default gesture handling
             }}
           >
+            {/* Existing screens */}
             <Stack.Screen name="RegisterAccount" component={RegisterAccount} />
             <Stack.Screen name="Intro" component={Intro} />
             <Stack.Screen name="How" component={How} />
@@ -77,7 +91,20 @@ const App = () => {
             <Stack.Screen name="Survey" component={Survey} />
             <Stack.Screen name="Search" component={Search} />
             <Stack.Screen name="ProductData" component={ProductData} />
-            
+
+            {/* Newly added screens */}
+            <Stack.Screen name="Favorites" component={Favorites} />
+            <Stack.Screen name="Notifications" component={Notifications} />
+            <Stack.Screen name="Settings" component={Settings} />
+            <Stack.Screen name="Recommendations" component={Recommendations} />
+
+            {/* Category Screens */}
+            <Stack.Screen name="EcoFashion" component={EcoFashion} />
+            <Stack.Screen name="GreenTech" component={GreenTech} />
+            <Stack.Screen name="FairTrade" component={FairTrade} />
+            <Stack.Screen name="HumanRights" component={HumanRights} />
+            <Stack.Screen name="EthicalGadgets" component={EthicalGadgets} />
+
           </Stack.Navigator>
         ) : null}
       </NavigationContainer>

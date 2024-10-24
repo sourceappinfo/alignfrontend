@@ -1,57 +1,90 @@
 import React, { useRef } from "react";
-import { Text, StyleSheet, TextInput, View, ScrollView, ImageBackground, StatusBar } from "react-native";
-import { FontFamily, Color, Border, Padding } from "GlobalStyles";  // Corrected path based on Babel alias
-import SwipeableScreenWrapper from 'components/SwipeableScreenWrapper';  // Corrected path based on Babel alias
+import { 
+  Text, 
+  StyleSheet, 
+  TextInput, 
+  View, 
+  ScrollView, 
+  ImageBackground, 
+  StatusBar,
+  TouchableOpacity 
+} from "react-native";
+import { FontFamily, Color, Border, Padding } from "GlobalStyles";
+import { useNavigation } from '@react-navigation/native';
 
-// Ensure the correct path for your background image
-const backgroundImage = require('assets/searchpic.jpg');  // Corrected path based on Babel alias
+const backgroundImage = require('assets/givingsearch.jpg');
 
-const Search = ({ navigation }) => {
-  const scrollViewRef = useRef(null); // Reference for ScrollView
+const Search = () => {
+  const navigation = useNavigation();
+  const scrollViewRef = useRef(null);
 
   return (
-    <>
-      {/* Ensure the status bar is hidden or transparent */}
+    <View style={styles.container}>
       <StatusBar barStyle="light-content" translucent={true} backgroundColor="transparent" />
       
-      <SwipeableScreenWrapper
-        onSwipeLeft={() => {
-          console.log('Swiped left, navigating to Profile'); // Navigate to the next screen on swipe left
-          navigation.navigate('Profile');
-        }}
-        onSwipeRight={() => {
-          console.log('Swiped right, navigating to ProductData'); // Navigate to the previous screen on swipe right
-          navigation.navigate('ProductData');
-        }}
-        simultaneousHandlers={scrollViewRef} // Enable scroll and swipe to work together
-      >
-        <ImageBackground source={backgroundImage} style={styles.background} resizeMode="cover">
-          <ScrollView ref={scrollViewRef} contentContainerStyle={styles.scrollViewContent}>
-            <View style={[styles.search, styles.searchBorder]}>
-              <Text style={styles.searchTitle}>SEARCH</Text>
-              <TextInput style={[styles.searchButton, styles.searchBorder]} placeholder="Search..." />
-            </View>
-          </ScrollView>
-        </ImageBackground>
-      </SwipeableScreenWrapper>
-    </>
+      <ImageBackground source={backgroundImage} style={styles.background} resizeMode="cover">
+        {/* Overlay */}
+        <View style={styles.overlay} />
+
+        <ScrollView ref={scrollViewRef} contentContainerStyle={styles.scrollViewContent}>
+          
+          {/* Title container */}
+          <View style={styles.titleContainer}>
+            <Text style={styles.searchTitle}>SEARCH</Text>
+          </View>
+          
+          {/* Search Bar container */}
+          <View style={[styles.searchContainer, styles.searchBorder]}>
+            <TextInput 
+              style={styles.searchButton} 
+              placeholder="Search..." 
+              placeholderTextColor="rgba(0, 0, 0, 0.5)"
+            />
+          </View>
+
+        </ScrollView>
+
+        {/* Navigation Buttons */}
+        <TouchableOpacity 
+          style={[styles.navButton, styles.navButtonLeft]}
+          onPress={() => navigation.navigate('RegisterAccount')} // Navigate back to RegisterAccount page
+        >
+          <Text style={styles.navButtonText}>←</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.navButton, styles.navButtonRight]}
+          onPress={() => navigation.navigate('Profile')}
+        >
+          <Text style={styles.navButtonText}>→</Text>
+        </TouchableOpacity>
+      </ImageBackground>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   background: {
     flex: 1,
-    width: '100%', // Ensure full width
-    height: '100%', // Ensure full height
-    position: 'absolute', // Ensure it fills the screen without gaps
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    width: '100%',
+    height: '100%',
+  },
+  // Added overlay style
+  overlay: {
+    ...StyleSheet.absoluteFillObject, // This ensures the overlay covers the entire screen
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Dark overlay with 40% opacity
   },
   scrollViewContent: {
     flexGrow: 1,
-    justifyContent: 'center', // Ensures content stays centered in the scroll view
+  },
+  titleContainer: {
+    position: 'absolute', // Make the title independent of scrollView positioning
+    top: 290, // Adjust the vertical position of the title as needed
+    width: '100%',
+    alignItems: 'center', // Center horizontally
   },
   searchTitle: {
     fontSize: 70,
@@ -59,7 +92,11 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.sonder,
     color: Color.white,
     textAlign: "center",
-    marginBottom: 20, // Add spacing between title and search button
+  },
+  searchContainer: {
+    marginTop: 390, // Separating search bar from title
+    alignItems: 'center',
+    width: '100%',
   },
   searchButton: {
     shadowOffset: {
@@ -76,14 +113,37 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: Padding.p_sm,
-    paddingTop: Padding.p_sm,
     paddingRight: 43,
-    paddingBottom: Padding.p_sm,
   },
-  search: {
-    padding: Padding.p_sm,
-    justifyContent: "center",
-    alignItems: "center",
+  // Navigation button styles
+  navButton: {
+    position: 'absolute',
+    bottom: 40,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  navButtonLeft: {
+    left: 30,
+  },
+  navButtonRight: {
+    right: 30,
+  },
+  navButtonText: {
+    color: Color.white,
+    fontSize: 20,
+    fontFamily: FontFamily.ralewayExtraBold,
   },
 });
 

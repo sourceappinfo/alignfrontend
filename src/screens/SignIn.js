@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { 
   Text, 
@@ -12,13 +13,15 @@ import { TextInput as RNPTextInput } from "react-native-paper";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from '@react-navigation/native';
-import { Color, Border, FontSize, FontFamily, Padding } from "GlobalStyles";
+import { Color, Border, FontSize, FontFamily } from "GlobalStyles";
 
 const SignIn = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  
+  const [overlayOpacity, setOverlayOpacity] = useState(0.5);  // Adjustable overlay opacity
 
   const validateForm = () => {
     if (!email || !password) {
@@ -40,7 +43,7 @@ const SignIn = () => {
       const response = await axios.post('http://your-backend-url/api/auth/login', { email, password });
       const { token } = response.data;
       await AsyncStorage.setItem('token', token);
-      navigation.replace('Home');
+      navigation.replace('SideMenu'); // Navigate to SideMenu after login
     } catch (error) {
       Alert.alert("Login Failed", "Invalid email or password.");
     } finally {
@@ -49,7 +52,7 @@ const SignIn = () => {
   };
 
   const handleCreateAccount = () => {
-    navigation.navigate('RegisterAccount');
+    navigation.navigate('Profile'); // Navigate to Profile on create account
   };
 
   const handleRecoveryPassword = () => {
@@ -59,17 +62,21 @@ const SignIn = () => {
   return (
     <View style={styles.container}>
       <ImageBackground 
-        source={require("assets/signinpicture.jpg")}
+        source={require("assets/howlightpic.jpg")} // Background image
         style={styles.background}
       >
-        <View style={styles.overlay} />
-        <View style={styles.signIn}>
-          <View style={styles.textContainer}>
-            <Text style={[styles.helloAgain, styles.helloAgainClr]}>
-              Hello Again!
-            </Text>
-          </View>
+        {/* Overlay with adjustable opacity */}
+        <View style={[styles.overlay, { backgroundColor: `rgba(0, 0, 0, ${overlayOpacity})` }]} />
 
+        {/* Independent TextContainer */}
+        <View style={styles.textContainer}>
+          <Text style={[styles.helloAgain, styles.helloAgainClr]}>
+            Hello Again!
+          </Text>
+        </View>
+
+        {/* Email Input */}
+        <View style={styles.inputContainer}>
           <RNPTextInput
             style={[styles.input, styles.emailInput]}
             placeholder="Email"
@@ -89,7 +96,10 @@ const SignIn = () => {
             }}
             outlineStyle={{ borderWidth: 1 }}
           />
+        </View>
 
+        {/* Password Input */}
+        <View style={styles.inputContainer}>
           <RNPTextInput
             style={[styles.input, styles.passwordInput]}
             placeholder="Password"
@@ -110,7 +120,10 @@ const SignIn = () => {
             }}
             outlineStyle={{ borderWidth: 1 }}
           />
+        </View>
 
+        {/* Recovery Password */}
+        <View style={styles.recoveryPasswordContainer}>
           <TouchableOpacity 
             style={styles.recoveryPassword} 
             onPress={handleRecoveryPassword}
@@ -119,7 +132,10 @@ const SignIn = () => {
               Recovery Password
             </Text>
           </TouchableOpacity>
+        </View>
 
+        {/* Login Button */}
+        <View style={styles.buttonContainer}>
           <TouchableOpacity 
             onPress={handleLogin} 
             style={styles.loginButton} 
@@ -131,7 +147,10 @@ const SignIn = () => {
               <Text style={styles.buttonText}>Sign In</Text>
             )}
           </TouchableOpacity>
+        </View>
 
+        {/* Create Account Button */}
+        <View style={styles.buttonContainer}>
           <TouchableOpacity 
             onPress={handleCreateAccount} 
             style={styles.createAccountButton}
@@ -140,22 +159,23 @@ const SignIn = () => {
               Create Account
             </Text>
           </TouchableOpacity>
-
-          {/* Navigation Buttons */}
-          <TouchableOpacity 
-            style={[styles.navButton, styles.navButtonLeft]}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.navButtonText}>←</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={[styles.navButton, styles.navButtonRight]}
-            onPress={() => navigation.navigate('Intro')}
-          >
-            <Text style={styles.navButtonText}>→</Text>
-          </TouchableOpacity>
         </View>
+
+        {/* Navigation Buttons */}
+        <TouchableOpacity 
+          style={[styles.navButton, styles.navButtonLeft]}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.navButtonText}>←</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.navButton, styles.navButtonRight]}
+          onPress={() => navigation.navigate('Intro')}
+        >
+          <Text style={styles.navButtonText}>→</Text>
+        </TouchableOpacity>
+
       </ImageBackground>
     </View>
   );
@@ -170,18 +190,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  // Overlay style with absolute positioning and adjustable background color
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.2)',
-  },
-  signIn: {
-    width: "100%",
-    height: "100%",
-    padding: 20,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'rgba(0, 0, 0, 0)', // Default opacity, but adjustable via state
   },
   textContainer: {
+    position: 'absolute',
+    top: 250, // You can adjust this value to move it
     width: "100%",
     alignItems: "center",
   },
@@ -191,42 +207,61 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.sonder,
     width: 356,
     textAlign: "center",
-    marginBottom: 40,
   },
   helloAgainClr: {
     color: Color.white,
+  },
+  inputContainer: {
+    position: 'absolute',
+    top: 250, // Adjust to move input fields independently
+    width: "100%",
+    paddingHorizontal: 20,
   },
   input: {
     height: 50,
     borderRadius: 25,
     paddingLeft: 10,
     width: "100%",
-    marginBottom: 20,
     backgroundColor: 'transparent',
   },
   emailInput: {
-    marginTop: 20,
+    marginTop: 100,
   },
   passwordInput: {
-    marginBottom: 10,
+    marginTop: 170,
   },
-  recoveryPassword: {
-    alignSelf: 'flex-start',
-    marginBottom: 20,
-    marginLeft: 20,
+  recoveryPasswordContainer: {
+    position: 'absolute',
+    top: 480, // Adjust to move independently
+    left: 40,
   },
   recoveryPasswordText: {
     color: Color.white,
-    fontFamily: FontFamily.ralewayExtraBold,
+    fontFamily: FontFamily.ralewaylight,
     fontSize: FontSize.paragraphRegular_size,
   },
+  buttonContainer: {
+    position: 'absolute',
+    top: 520, // Adjust position of the buttons
+    width: "100%",
+    paddingHorizontal: 20,
+    alignItems: "center",
+  },
   loginButton: {
-    backgroundColor: "#13557B",
+    backgroundColor: "#5CB0E4",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 25,
     alignItems: "center",
-    marginVertical: 20,
+    width: "100%",
+  },
+  createAccountButton: {
+    backgroundColor: "#0D1B2A",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    alignItems: "center",
+    marginTop: 60, // Adds space between buttons
     width: "100%",
   },
   buttonText: {
@@ -234,15 +269,6 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.ralewayExtraBold,
     fontWeight: "800",
     fontSize: FontSize.size_lg,
-  },
-  createAccountButton: {
-    backgroundColor: "#13557B",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 25,
-    alignItems: "center",
-    marginTop: 10,
-    width: "100%",
   },
   createAccountText: {
     color: Color.white,
@@ -259,14 +285,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   navButtonLeft: {
     left: 30,

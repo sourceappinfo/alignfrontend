@@ -1,27 +1,58 @@
 import * as React from "react";
-import { Text, StyleSheet, View } from "react-native";
-import { FontSize, FontFamily, Color, Border } from 'GlobalStyles'; // No 'src/' because of the alias setup
+import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react-native";
+import { FontSize, FontFamily, Color, Border } from 'GlobalStyles';  // No 'src/' because of the alias setup
 
-const CorporateGovernance = () => {
+const CorporateGovernance = ({ navigation }) => {
   return (
-    <View style={styles.corporateGovernance}>
-      <Text style={[styles.thisLooksAt, styles.csrTransform]}>{`
-This looks at a company's corporate social responsibility (CSR), transparency, accountability, and leadership practices. We examine political lobbying activities, shareholder values, and commitment to corporate social responsibility.
+    <ImageBackground
+      source={require('assets/pexels-arthousestudio-4628189.jpg')}  // Ensure this path is correct
+      style={styles.backgroundImage}
+    >
+      {/* Temporarily remove overlay for testing */}
+      {/* <View style={styles.overlay} /> */}
 
+      <View style={styles.corporateGovernance}>
+        <Text style={[styles.thisLooksAt, styles.csrTransform]}>
+          {`This looks at a company's corporate social responsibility (CSR), transparency, accountability, and leadership practices. We examine political lobbying activities, shareholder values, and commitment to corporate social responsibility.`}
+        </Text>
 
-`}</Text>
-      <View style={[styles.pexelsEsrageziyor4576022011, styles.csrTransform]} />
-      <Text style={[styles.csr, styles.csrTransform]}>CSR</Text>
-    </View>
+        <Text style={[styles.csr, styles.csrTransform]}>CSR</Text>
+        
+        {/* Navigation Buttons */}
+        <TouchableOpacity 
+          style={[styles.navButton, styles.navButtonLeft]} 
+          onPress={() => navigation.navigate('Labor')}  // Navigate to the previous screen
+        >
+          <Text style={styles.navButtonText}>←</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.navButton, styles.navButtonRight]} 
+          onPress={() => navigation.navigate('SignIn')}  // Navigate to the next screen
+        >
+          <Text style={styles.navButtonText}>→</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%', // Ensure it covers full width
+    height: '100%', // Ensure it covers full height
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  // Comment out the overlay for testing
+  // overlay: {
+  //   ...StyleSheet.absoluteFillObject,  // Covers the entire screen
+  //   backgroundColor: 'rgba(0, 0, 10, 0.9)',  // Adjustable opacity overlay
+  // },
   csrTransform: {
     transform: [
-      {
-        rotate: "-0.1deg",
-      },
+      { rotate: "-0.1deg" },
     ],
     position: "absolute",
   },
@@ -34,30 +65,10 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.maliMedium,
     width: 339,
     textShadowColor: "rgba(0, 0, 0, 0.25)",
-    textShadowOffset: {
-      width: 0,
-      height: 4,
-    },
+    textShadowOffset: { width: 0, height: 4 },
     textShadowRadius: 4,
     textAlign: "left",
     color: Color.white,
-    transform: [
-      {
-        rotate: "-0.1deg",
-      },
-    ],
-    position: "absolute",
-  },
-  pexelsEsrageziyor4576022011: {
-    top: 467,
-    left: -1429,
-    width: 525,
-    height: 59,
-    transform: [
-      {
-        rotate: "-0.1deg",
-      },
-    ],
     position: "absolute",
   },
   csr: {
@@ -69,28 +80,43 @@ const styles = StyleSheet.create({
     width: 380,
     textAlign: "left",
     color: Color.white,
-    transform: [
-      {
-        rotate: "-0.1deg",
-      },
-    ],
     position: "absolute",
   },
   corporateGovernance: {
-    borderRadius: Border.br_11xl,
-    backgroundColor: Color.colorBlack,
-    borderStyle: "solid",
-    borderColor: Color.colorBlack,
-    borderWidth: 1,
     flex: 1,
+    borderRadius: Border.br_11xl,
+    backgroundColor: 'transparent',  // Ensure transparency
+    borderWidth: 1,
     width: "100%",
     height: 956,
     overflow: "hidden",
-    transform: [
-      {
-        rotate: "0.1deg",
-      },
-    ],
+  },
+  // Navigation Button styles
+  navButton: {
+    position: 'absolute',
+    bottom: 40,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  navButtonLeft: {
+    left: 30,  // Positioning for the back button on the left
+  },
+  navButtonRight: {
+    right: 30,  // Positioning for the forward button on the right
+  },
+  navButtonText: {
+    color: Color.white,
+    fontSize: 20,
+    fontFamily: FontFamily.ralewayExtraBold,
   },
 });
 
