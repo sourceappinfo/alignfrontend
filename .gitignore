@@ -74,4 +74,8 @@ src/assets/*@3x.png
 /android/local.properties
 
 # Keep fonts and essential assets
-!src/ass
+!src/assets/fonts/
+!src/assets/images/
+
+# Ignore large video file
+src/assets/frontvideopage.mp4
