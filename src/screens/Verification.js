@@ -19,12 +19,22 @@ const Verification = () => {
           <Text style={styles.title}>Verification</Text>
           <Text style={styles.description}>Please verify your email to continue.</Text>
 
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignIn')}>
+          <TouchableOpacity 
+            style={styles.button} 
+            onPress={() => navigation.navigate('SignIn')}
+            activeOpacity={0.8}
+            accessibilityLabel="Go to Sign In"
+          >
             <Text style={styles.buttonText}>Go to Sign In</Text>
           </TouchableOpacity>
 
           <View style={styles.navigation}>
-            <TouchableOpacity style={styles.navButtonLeft} onPress={() => navigation.goBack()}>
+            <TouchableOpacity 
+              style={styles.navButtonLeft} 
+              onPress={() => navigation.goBack()}
+              activeOpacity={0.8}
+              accessibilityLabel="Go back"
+            >
               <Text style={styles.navButtonText}>← Back</Text>
             </TouchableOpacity>
           </View>

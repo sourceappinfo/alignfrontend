@@ -4,7 +4,7 @@ import { Color, FontFamily, FontSize, Border } from 'GlobalStyles'; // GlobalSty
 import SwipeableScreenWrapper from 'components/SwipeableScreenWrapper'; // Using alias without 'src'
 
 // Import your image here
-const backgroundImage = require('assets/howtestpic2.jpg'); // Correct alias path for assets
+const backgroundImage = require('assets/climate-background.jpg'); // Correct alias path for assets
 
 const Environment = ({ navigation }) => {
   return (
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject, // Covers the entire screen
-    backgroundColor: 'rgba(0, 0, 60, 0.5)', // Semi-transparent black with 30% opacity
+    backgroundColor: 'rgba(0, 40, 40, 0.5)', // Semi-transparent black with 30% opacity
   },
   scrollViewContent: {
     flexGrow: 1,
@@ -83,29 +83,31 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_77xl,
     fontFamily: FontFamily.sonder,
     color: Color.white,
-    marginTop: 20,
-    marginBottom: 20, // Space between title and content
+    marginTop: 30,
+    marginBottom: 25, // Space between title and content
   },
   thisAssessesThe: {
-    fontSize: 37,
-    fontFamily: FontFamily.poppinsmedium,
+    fontSize: 31,
+    fontFamily: FontFamily.poppinsMedium, 
     color: Color.white,
-    lineHeight: 45, // Line height for better readability
-    marginBottom: 20, // Space between paragraph and list items
+    lineHeight: 50, // Line height for better readability
+    marginBottom: 30, // Space between paragraph and list items
+    marginLeft: 0,
   },
   leftAlignedListContainer: {
     marginTop: 10, // Space between list and the text above
     marginLeft: 0, // Align items to the left
   },
   customLineSpacing: {
-    lineHeight: 60, // Adjust line height for better spacing between the list items
-    marginBottom: 20, // Space between each list item
+    lineHeight: 70, // Adjust line height for better spacing between the list items
+    marginBottom: 35, // Space between each list item
   },
   listItem: {
-    fontSize: 64,
+    fontSize: 52.5,
     fontFamily: FontFamily.reenieBeanie,
     color: Color.white,
     textAlign: 'left', // Align text to the left
+    marginLeft: 0,
   },
   environment: {
     paddingTop: 60, // Padding at the top of the screen for content

@@ -55,6 +55,12 @@ export const Color = {
   colorHoneydew: "#d2ffe6",
   colorSeagreen: "#005e36",
   colorDarkslateblue: "#152153",
+  background: '#1A1A1A',
+  primary: '#4A90E2',
+  textPrimary: '#333333',
+  textSecondary: '#666666',
+  selectedOption: '#4A90E2',
+  optionBackground: 'rgba(0, 0, 0, 0.05)',
 };
 /* Gaps */
 export const Gap = {
@@ -71,6 +77,9 @@ export const Padding = {
   p_5xs: 8,
   p_11xs: 2,
   p_378xl: 397,
+  p_md: 16,
+  p_lg: 24,
+  p_xl: 32,
 };
 /* border radiuses */
 export const Border = {
@@ -80,4 +89,6 @@ export const Border = {
   br_31xl: 50,
   br_9xs: 4,
   br_11xl: 30,
+  br_md: 12,
+  br_lg: 20,
 };

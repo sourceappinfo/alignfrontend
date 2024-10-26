@@ -5,7 +5,7 @@ import { FontSize, FontFamily, Color, Border } from 'GlobalStyles';  // No 'src/
 const CorporateGovernance = ({ navigation }) => {
   return (
     <ImageBackground
-      source={require('assets/pexels-arthousestudio-4628189.jpg')}  // Ensure this path is correct
+      source={require('assets/csr-background.jpg')}  // Ensure this path is correct
       style={styles.backgroundImage}
     >
       {/* Temporarily remove overlay for testing */}
@@ -28,7 +28,7 @@ const CorporateGovernance = ({ navigation }) => {
 
         <TouchableOpacity 
           style={[styles.navButton, styles.navButtonRight]} 
-          onPress={() => navigation.navigate('SignIn')}  // Navigate to the next screen
+          onPress={() => navigation.navigate('Survey')}  // Navigate to the next screen
         >
           <Text style={styles.navButtonText}>→</Text>
         </TouchableOpacity>
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   // Comment out the overlay for testing
   // overlay: {
   //   ...StyleSheet.absoluteFillObject,  // Covers the entire screen
-  //   backgroundColor: 'rgba(0, 0, 10, 0.9)',  // Adjustable opacity overlay
+  //   backgroundColor: 'rgba(0, 0, 0, 0)',  // Adjustable opacity overlay
   // },
   csrTransform: {
     transform: [
@@ -59,11 +59,12 @@ const styles = StyleSheet.create({
   thisLooksAt: {
     top: 147,
     left: 16,
-    fontSize: FontSize.size_16xl,
-    lineHeight: 46,
+    fontSize: 31,
+    lineHeight: 55,
     fontWeight: "500",
-    fontFamily: FontFamily.maliMedium,
+    fontFamily: FontFamily.poppinsMedium, 
     width: 339,
+    marginTop: 20,
     textShadowColor: "rgba(0, 0, 0, 0.25)",
     textShadowOffset: { width: 0, height: 4 },
     textShadowRadius: 4,

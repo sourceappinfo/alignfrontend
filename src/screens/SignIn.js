@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { 
   Text, 
@@ -20,7 +19,7 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  
+
   const [overlayOpacity, setOverlayOpacity] = useState(0.5);  // Adjustable overlay opacity
 
   const validateForm = () => {
@@ -248,7 +247,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   loginButton: {
-    backgroundColor: "#5CB0E4",
+    backgroundColor: 'rgba(255, 255, 255, 0.3)', // Same as nav button background
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 25,
@@ -256,7 +255,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   createAccountButton: {
-    backgroundColor: "#0D1B2A",
+    backgroundColor: 'rgba(255, 255, 255, 0.3)', // Same as nav button background
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 25,
@@ -265,13 +264,13 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   buttonText: {
-    color: Color.white,
+    color: "#052B41",
     fontFamily: FontFamily.ralewayExtraBold,
     fontWeight: "800",
     fontSize: FontSize.size_lg,
   },
   createAccountText: {
-    color: Color.white,
+    color: "#052B41",
     fontFamily: FontFamily.ralewayExtraBold,
     fontWeight: "800",
     fontSize: FontSize.size_lg,
@@ -282,7 +281,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)', // Light blue button background
     justifyContent: 'center',
     alignItems: 'center',
   },

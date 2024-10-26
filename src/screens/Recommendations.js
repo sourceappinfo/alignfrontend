@@ -42,7 +42,7 @@ const Recommendations = () => {
 
   return (
     <ImageBackground
-      source={require('assets/recommendations_background.jpg')}
+      source={require('assets/recommendations-background.jpg')}
       style={styles.backgroundImage}
       resizeMode="cover"
     >

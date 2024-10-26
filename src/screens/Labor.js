@@ -10,7 +10,7 @@ const Labor = ({ navigation }) => {
       onSwipeRight={() => navigation.navigate('CorporateGovernance')}  // Replace 'PreviousScreen' with the actual screen name
     >
       <ImageBackground
-        source={require('assets/laborpic.jpg')}  // Using 'assets' alias for the image path
+        source={require('assets/labor-background.jpg')}  // Using 'assets' alias for the image path
         style={styles.backgroundImage}
         imageStyle={styles.image}
       >
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     width: '90%',
     marginLeft: 20,
     marginTop: 40,
-    textShadowColor: 'rgba(0, 0, 0, 0.25)',
+    textShadowColor: 'rgba(0, 0, 0, 0)',
     textShadowOffset: {
       width: 0,
       height: 4,
@@ -92,13 +92,13 @@ const styles = StyleSheet.create({
   },
   weEvaluateHow: {
     top: 180,
-    fontSize: 40,
-    lineHeight: 50,
+    fontSize: 31,
+    lineHeight: 58,
     marginTop: 22,
     marginLeft: 20,
-    fontFamily: FontFamily.poppinsmedium,
+    fontFamily: FontFamily.poppinsMedium, 
     width: '85%',
-    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowColor: 'rgba(0, 0, 0, 0)',
     textShadowOffset: {
       width: 0,
       height: 4,

@@ -19,18 +19,16 @@ const EcoFashion = () => {
           </Text>
 
           {/* Navigation Buttons */}
-          <View style={styles.navigation}>
-            <TouchableOpacity 
-              style={[styles.navButton, styles.navButtonLeft]} 
-              onPress={() => navigation.goBack()}>
-              <Text style={styles.navButtonText}>← Back</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={[styles.navButton, styles.navButtonRight]} 
-              onPress={() => navigation.navigate('GreenTech')}>
-              <Text style={styles.navButtonText}>Next →</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity 
+            style={[styles.navButton, styles.navButtonLeft]} 
+            onPress={() => navigation.goBack('Recomendations')}>
+            <Text style={styles.navButtonText}>←</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.navButton, styles.navButtonRight]} 
+            onPress={() => navigation.navigate('GreenTech')}>
+            <Text style={styles.navButtonText}>→</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </View>
@@ -62,26 +60,35 @@ const styles = StyleSheet.create({
     color: Color.white,
     textAlign: 'center',
   },
-  navigation: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 30,
-  },
+  // Navigation buttons at the bottom
   navButton: {
-    width: 120,
-    paddingVertical: 10,
-    borderRadius: Border.br_xl,
-    backgroundColor: Color.blue,
+    position: 'absolute',
+    bottom: 40,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)', // Light opacity for buttons
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  navButtonLeft: {},
-  navButtonRight: {},
+  navButtonLeft: {
+    left: 30, // Position for left arrow
+  },
+  navButtonRight: {
+    right: 30, // Position for right arrow
+  },
   navButtonText: {
     color: Color.white,
-    fontFamily: FontFamily.ralewayBold,
-    fontSize: FontSize.size_xl,
+    fontSize: 20,
+    fontFamily: FontFamily.ralewayExtraBold,
   },
 });
 

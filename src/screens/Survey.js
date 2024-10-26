@@ -1,1962 +1,1827 @@
-import React, { useRef } from 'react';
-import { Text, StyleSheet, View, ScrollView, Image, ImageBackground } from "react-native";
-import { Color, FontFamily, FontSize, Border } from "GlobalStyles";
-import { PanGestureHandler } from 'react-native-gesture-handler';
-import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+// constants/propTypes.js
+import PropTypes from 'prop-types';
 
-// Import your background image here
-const backgroundImage = require('assets/productdatabackdrop.jpg');
+export const QuestionOptionPropTypes = {
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  label: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  icon: PropTypes.string
+};
 
-const Survey = ({ navigation }) => {
-  const translateX = useSharedValue(0);
-  const scrollViewRef = useRef(null);
+export const BaseQuestionPropTypes = {
+  id: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  question: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  required: PropTypes.bool,
+  dependsOn: PropTypes.shape({
+    questionId: PropTypes.string,
+    value: PropTypes.any
+  })
+};
 
-  // Swipe gesture handler
-  const panGesture = useAnimatedGestureHandler({
-    onActive: (event) => {
-      translateX.value = event.translationX;
+export const ScaleQuestionPropTypes = {
+  ...BaseQuestionPropTypes,
+  type: PropTypes.oneOf(['scale']).isRequired,
+  options: PropTypes.arrayOf(PropTypes.shape(QuestionOptionPropTypes)).isRequired,
+  minLabel: PropTypes.string,
+  maxLabel: PropTypes.string
+};
+
+export const MultiSelectQuestionPropTypes = {
+  ...BaseQuestionPropTypes,
+  type: PropTypes.oneOf(['multiSelect']).isRequired,
+  options: PropTypes.arrayOf(PropTypes.shape(QuestionOptionPropTypes)).isRequired,
+  maxSelections: PropTypes.number,
+  minSelections: PropTypes.number
+};
+
+export const SingleSelectQuestionPropTypes = {
+  ...BaseQuestionPropTypes,
+  type: PropTypes.oneOf(['singleSelect']).isRequired,
+  options: PropTypes.arrayOf(PropTypes.shape(QuestionOptionPropTypes)).isRequired
+};
+
+export const OpenEndedQuestionPropTypes = {
+  ...BaseQuestionPropTypes,
+  type: PropTypes.oneOf(['openEnded']).isRequired,
+  placeholder: PropTypes.string,
+  maxLength: PropTypes.number
+};
+
+// constants/surveyConfig.js
+export const PURCHASE_FREQUENCIES = {
+  NEVER: 'never',
+  RARELY: 'rarely',
+  SOMETIMES: 'sometimes',
+  OFTEN: 'often',
+  ALWAYS: 'always'
+};
+
+export const VALUE_PRIORITIES = {
+  MUST_HAVE: 'must_have',
+  NICE_TO_HAVE: 'nice_to_have',
+  NEUTRAL: 'neutral'
+};
+
+export const CONFIDENCE_LEVELS = {
+  VERY_LOW: 1,
+  LOW: 2,
+  MEDIUM: 3,
+  HIGH: 4,
+  VERY_HIGH: 5
+};
+
+export const PRICE_RANGES = {
+  BUDGET: 'budget',
+  MID_RANGE: 'mid_range',
+  PREMIUM: 'premium',
+  LUXURY: 'luxury'
+};
+
+// config/theme.js
+export const Theme = {
+  colors: {
+    primary: '#2C8EB5',
+    primaryLight: '#4AA7CD',
+    secondary: '#6C757D',
+    background: '#FFFFFF',
+    surface: '#F8F9FA',
+    text: '#212529',
+    border: '#DEE2E6',
+    error: '#DC3545',
+    success: '#28A745',
+    white: '#FFFFFF',
+  },
+  fonts: {
+    regular: 'Raleway-Regular',
+    medium: 'Raleway-Medium',
+    bold: 'Raleway-Bold',
+  },
+  borderRadius: {
+    small: 4,
+    medium: 8,
+    large: 12,
+  },
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+  },
+};
+
+// config/environment.js
+export const ENV = {
+  API: {
+    BASE_URL: process.env.API_BASE_URL || 'https://api.yourdomain.com',
+    TIMEOUT: 30000,
+    RETRY_ATTEMPTS: 3,
+  },
+  ANALYTICS: {
+    ENABLED: true,
+    TRACKING_ID: process.env.ANALYTICS_TRACKING_ID,
+  },
+  STORAGE: {
+    ENCRYPTION_KEY: process.env.STORAGE_ENCRYPTION_KEY,
+  },
+};
+
+// data/surveyQuestions.js
+export const VALUES_SECTION = {
+  id: 'core_values',
+  title: 'Your Core Values',
+  description: 'Help us understand what matters most to you.',
+  progressWeight: 0.25,
+  questions: [
+    {
+      id: 'important_values',
+      category: 'Values',
+      type: 'multiSelect',
+      question: 'What values are most important to you when choosing a company or product?',
+      description: 'Select all that apply',
+      required: true,
+      options: [
+        { value: 'environmental', label: 'Environmental Protection/Sustainability' },
+        { value: 'social_justice', label: 'Social justice' },
+        { value: 'human_rights', label: 'Human rights' },
+        { value: 'labor', label: 'Fair labor practices' },
+        { value: 'supply_chain', label: 'Supply chain ethics' },
+        { value: 'community', label: 'Community involvement' },
+        { value: 'diversity', label: 'Diversity and inclusion' },
+        { value: 'innovation', label: 'Innovation and technology' },
+        { value: 'animal_welfare', label: 'Animal welfare' },
+        { value: 'political', label: 'Political affiliations' }
+      ]
+    }
+  ]
+};
+
+export const VALUES_RATING_SECTION = {
+  id: 'value_importance',
+  title: 'Value Importance',
+  description: 'How important is each value to you?',
+  progressWeight: 0.2,
+  questions: [
+    {
+      id: 'rate_environmental',
+      category: 'Value Importance',
+      type: 'scale',
+      question: 'Rate the importance of environmental protection/sustainability',
+      required: true,
+      options: [
+        { value: 1, label: 'Not Important' },
+        { value: 2, label: 'Slightly Important' },
+        { value: 3, label: 'Moderately Important' },
+        { value: 4, label: 'Very Important' },
+        { value: 5, label: 'Critical' }
+      ]
     },
-    onEnd: (event) => {
-      if (event.translationX < -50) {
-        navigation.navigate('NextScreen'); // Replace with the next screen name
-      } else if (event.translationX > 50) {
-        navigation.goBack(); // Go back to the previous screen
-      }
-      translateX.value = withTiming(0);
+    // Add similar questions for other values
+  ]
+};
+
+export const PURCHASE_BEHAVIOR_SECTION = {
+  id: 'purchase_behavior',
+  title: 'Purchase Behavior',
+  description: 'Tell us about your shopping habits',
+  progressWeight: 0.15,
+  questions: [
+    {
+      id: 'purchase_frequency',
+      category: 'Purchase Frequency',
+      type: 'singleSelect',
+      question: 'How often do you purchase from these categories?',
+      required: true,
+      options: [
+        { value: 'clothing', label: 'Clothing' },
+        { value: 'food', label: 'Food and Beverage' },
+        { value: 'household', label: 'Household goods' },
+        { value: 'personal_care', label: 'Personal care products' },
+        { value: 'electronics', label: 'Electronics' }
+      ]
+    }
+  ]
+};
+
+export const KNOWLEDGE_SECTION = {
+  id: 'knowledge_assessment',
+  title: 'Knowledge Assessment',
+  description: 'Rate your familiarity with these topics',
+  progressWeight: 0.15,
+  questions: [
+    {
+      id: 'knowledge_csr',
+      category: 'Knowledge',
+      type: 'scale',
+      question: 'How knowledgeable are you about corporate social responsibility?',
+      required: true,
+      options: [
+        { value: 1, label: 'Not at all' },
+        { value: 2, label: 'Slightly' },
+        { value: 3, label: 'Moderately' },
+        { value: 4, label: 'Very' },
+        { value: 5, label: 'Expert' }
+      ]
+    }
+  ]
+};
+
+export const DEALBREAKERS_SECTION = {
+  id: 'dealbreakers',
+  title: 'Deal Breakers',
+  description: 'What would make you stop supporting a company?',
+  progressWeight: 0.15,
+  questions: [
+    {
+      id: 'company_dealbreakers',
+      category: 'Dealbreakers',
+      type: 'multiSelect',
+      question: 'Select all issues that would make you stop supporting a company:',
+      required: true,
+      options: [
+        { value: 'environmental_violations', label: 'Environmental violations' },
+        { value: 'poor_labor', label: 'Poor treatment of employees' },
+        { value: 'human_rights', label: 'Human rights violations' },
+        { value: 'unsustainable', label: 'Unsustainable practices' },
+        { value: 'inequality', label: 'Employee income inequality' },
+        { value: 'transparency', label: 'Lack of transparency' },
+        { value: 'media', label: 'Negative media coverage' },
+        { value: 'political', label: 'Political affiliations' },
+        { value: 'quality', label: 'Poor product quality' }
+      ]
+    }
+  ]
+};
+
+export const FINAL_SECTION = {
+  id: 'final_questions',
+  title: 'Final Questions',
+  description: 'Almost done! Just a few more questions.',
+  progressWeight: 0.1,
+  questions: [
+    {
+      id: 'ethical_shopping_frequency',
+      type: 'singleSelect',
+      category: 'Behavior',
+      question: 'How often do you make purchasing decisions based on ethical practices?',
+      required: true,
+      options: [
+        { value: 'always', label: 'Always' },
+        { value: 'often', label: 'Often' },
+        { value: 'sometimes', label: 'Sometimes' },
+        { value: 'rarely', label: 'Rarely' },
+        { value: 'never', label: 'Never' }
+      ]
     },
-  });
+    {
+      id: 'preferred_companies',
+      type: 'openEnded',
+      category: 'Preferences',
+      question: 'Do you have any specific companies in mind that you would like to support?',
+      required: false,
+      placeholder: 'Enter company names separated by commas'
+    }
+  ]
+};
 
-  const rStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateX: translateX.value }],
-    };
-  });
+export const SURVEY_SECTIONS = [
+  VALUES_SECTION,
+  VALUES_RATING_SECTION,
+  PURCHASE_BEHAVIOR_SECTION,
+  KNOWLEDGE_SECTION,
+  DEALBREAKERS_SECTION,
+  FINAL_SECTION
+];
 
+export const getSectionProgress = (sectionId) => {
+  const section = SURVEY_SECTIONS.find(s => s.id === sectionId);
+  return section ? section.progressWeight : 0;
+};
+
+export const isSectionValid = (section, responses) => {
+  return section.questions.every(question => {
+    if (!question.required) return true;
+    const response = responses[question.id];
+    if (Array.isArray(response)) return response.length > 0;
+    return response !== undefined && response !== '';
+  });
+};
+
+// components/Survey/QuestionTypes/BaseQuestion.js
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
+import { Theme } from '../../../config/theme';
+import { BaseQuestionPropTypes } from '../../../constants/propTypes';
+
+const BaseQuestion = ({ question, error, isRequired, children }) => {
   return (
-    <PanGestureHandler onGestureEvent={panGesture}>
-      <Animated.View style={[{ flex: 1 }, rStyle]}>
-        <ImageBackground source={backgroundImage} style={styles.background} resizeMode="cover">
-          <ScrollView ref={scrollViewRef} contentContainerStyle={styles.scrollViewContent}>
-            <View style={styles.survey}>
-              <Text style={styles.align}>{`ALIGN.`}</Text>
-              <Text style={styles.personalizationSurvey}>{`Personalization Survey`}</Text>
-
-              {/* Add your image content */}
-              <Image
-                style={[styles.surveyChild, styles.surveyLayout]}
-                contentFit="cover"
-                source={require("assets/rectangle-4262.png")}
-              />
-              <Image
-                style={[styles.surveyItem, styles.surveyLayout]}
-                contentFit="cover"
-                source={require("assets/rectangle-4247.png")}
-              />
-              <Image
-                style={[styles.surveyInner, styles.surveyLayout]}
-                contentFit="cover"
-                source={require("assets/rectangle-42621.png")}
-              />
-              <Image
-                style={[styles.rectangleIcon, styles.surveyLayout]}
-                contentFit="cover"
-                source={require("assets/rectangle-4267.png")}
-              />
-      <Text style={styles.align}>{`ALIGN. `}</Text>
-      <Text
-        style={styles.personalizationSurvey}
-      >{`Personalization Survey  `}</Text>
-      <View style={[styles.view, styles.viewLayout]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view1, styles.viewLayout]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view2, styles.viewLayout]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view3, styles.viewLayout]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <View style={[styles.view4, styles.viewPosition16]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view5, styles.viewPosition16]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view6, styles.viewLayout]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-31.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view7, styles.viewPosition16]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view8, styles.viewPosition16]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view9, styles.viewPosition16]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <View style={[styles.view10, styles.viewPosition15]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view11, styles.viewPosition15]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view12, styles.viewPosition15]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view13, styles.viewPosition15]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view14, styles.viewPosition15]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <View style={[styles.view15, styles.viewPosition14]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view16, styles.viewPosition14]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view17, styles.viewPosition14]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view18, styles.viewPosition14]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view19, styles.viewPosition14]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <View style={[styles.view20, styles.viewPosition13]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view21, styles.viewPosition13]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view22, styles.viewPosition13]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view23, styles.viewPosition13]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view24, styles.viewPosition13]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <View style={[styles.view25, styles.viewPosition12]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view26, styles.viewPosition12]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view27, styles.viewPosition12]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view28, styles.viewPosition12]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view29, styles.viewPosition12]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <View style={[styles.view30, styles.viewPosition11]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view31, styles.viewPosition11]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view32, styles.viewPosition11]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view33, styles.viewPosition11]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view34, styles.viewPosition10]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view35, styles.viewPosition10]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view36, styles.viewPosition10]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view37, styles.viewPosition10]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <Text style={[styles.whatValuesAre, styles.whatTypo]}>
-        What values are most important to you when choosing a company or
-        product? (Select all that apply)
+    <View style={styles.container}>
+      <Text style={styles.category}>{question.category}</Text>
+      <Text style={styles.question}>
+        {question.question}
+        {isRequired && <Text style={styles.required}> *</Text>}
       </Text>
-      <Text style={[styles.environmentalProtectionsusta, styles.communityTypo]}>
-        Environmental Protection/Sustainability
-      </Text>
-      <Text style={[styles.socialJustice, styles.communityTypo]}>
-        Social justice
-      </Text>
-      <Text style={[styles.humanRights, styles.communityTypo]}>
-        Human rights
-      </Text>
-      <Text style={[styles.fairLaborPractices, styles.communityTypo]}>
-        Fair labor practices
-      </Text>
-      <Text
-        style={[styles.supplyChainEthics, styles.communityTypo]}
-      >{`Supply chain ethics `}</Text>
-      <Text style={[styles.communityInvolvement, styles.communityTypo]}>
-        Community involvement
-      </Text>
-      <Text style={[styles.diversityAndInclusion, styles.communityTypo]}>
-        Diversity and inclusion
-      </Text>
-      <Text style={[styles.innovationAndTechnology, styles.communityTypo]}>
-        Innovation and technology
-      </Text>
-      <Text style={[styles.animalWelfare, styles.communityTypo]}>
-        Animal welfare
-      </Text>
-      <Text style={[styles.politicalAffiliations, styles.communityTypo]}>
-        Political affiliations
-      </Text>
-      <Text style={[styles.brandReputation, styles.priceTypo]}>
-        Brand reputation
-      </Text>
-      <Text style={[styles.price, styles.priceTypo]}>Price</Text>
-      <Text style={[styles.ethicalPractices, styles.priceTypo]}>
-        Ethical practices
-      </Text>
-      <Text style={[styles.environmentalImpact, styles.priceTypo]}>
-        Environmental impact
-      </Text>
-      <Text style={[styles.productQuality, styles.priceTypo]}>
-        Product quality
-      </Text>
-      <Text style={[styles.recommendationsFromFriendsf, styles.priceTypo]}>
-        Recommendations from friends/family
-      </Text>
-      <Text style={[styles.politicalAffiliations1, styles.priceTypo]}>
-        Political affiliations
-      </Text>
-      <Text style={[styles.clothing, styles.priceTypo]}>Clothing</Text>
-      <Text style={[styles.foodAndBeverage, styles.priceTypo]}>
-        Food and Beverage
-      </Text>
-      <Text style={[styles.householdGoods, styles.priceTypo]}>
-        Household goods
-      </Text>
-      <Text style={[styles.personalCareProducts, styles.priceTypo]}>
-        Personal care products
-      </Text>
-      <Text style={[styles.electronics, styles.priceTypo]}>Electronics</Text>
-      <Text style={[styles.howWouldYou, styles.whatTypo]}>
-        How would you rate the importance of these values? (1-5 scale)
-      </Text>
-      <Text style={[styles.howOftenDo, styles.howOftenDoTypo]}>
-        How often do you purchase products from the following categories?
-        (Select one for each category)
-      </Text>
-      <Text style={[styles.whatFactorsInfluence, styles.whatTypo]}>
-        What factors influence your purchasing decisions? (Select all that
-        apply)
-      </Text>
-      <Text style={[styles.environmentalProtectionSust, styles.animalTypo]}>
-        Environmental protection/ sustainability
-      </Text>
-      <Text style={[styles.supplyChainEthics1, styles.animalTypo]}>
-        Supply chain ethics
-      </Text>
-      <Text style={[styles.socialJustice1, styles.humanRights1Typo]}>
-        Social justice
-      </Text>
-      <Text style={[styles.communityInvolvement1, styles.communityTypo]}>
-        Community involvement
-      </Text>
-      <Text style={[styles.fairLaborPractices1, styles.humanRights1Typo]}>
-        Fair labor practices
-      </Text>
-      <Text style={[styles.innovationAndTechnology1, styles.animalTypo]}>
-        Innovation and technology
-      </Text>
-      <Text style={[styles.diversityAndInclusion1, styles.animalTypo]}>
-        Diversity and inclusion
-      </Text>
-      <Text style={[styles.humanRights1, styles.humanRights1Typo]}>
-        Human rights
-      </Text>
-      <Text style={[styles.animalWelfare1, styles.animalTypo]}>
-        Animal welfare
-      </Text>
-      <View style={[styles.view38, styles.viewPosition9]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view39, styles.viewPosition9]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view40, styles.viewPosition9]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view41, styles.viewPosition9]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view42, styles.viewPosition9]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <Text style={[styles.politicalAffiliations2, styles.animalTypo]}>
-        Political affiliations
-      </Text>
-      <View style={[styles.pexelsBenanSude15692672227, styles.pexelsLayout]} />
-      <Text style={[styles.ethicalAndSustainability, styles.andTypo]}>
-        Ethical and sustainability ratings
-      </Text>
-      <Text style={[styles.companyHistoryAnd, styles.andTypo]}>
-        Company history and values
-      </Text>
-      <Text
-        style={[styles.recentNewsAnd, styles.andTypo]}
-      >{`Recent news and media `}</Text>
-      <Text
-        style={[styles.customerReviews, styles.andTypo]}
-      >{`Customer reviews `}</Text>
-      <Text style={[styles.financialPerformance, styles.andTypo]}>
-        Financial performance
-      </Text>
-      <Text style={[styles.recommendationsFromFriendsf1, styles.andTypo]}>
-        Recommendations from friends/family
-      </Text>
-      <Text
-        style={[styles.honestyAndTransparency, styles.textTypo]}
-      >{`Honesty and transparency `}</Text>
-      <Text style={[styles.whatFactorsInfluence1, styles.whatLayout]}>
-        What factors influence your purchasing decisions? (Select all that
-        apply)
-      </Text>
-      <View style={[styles.pexelsBenanSude156926722271, styles.pexelsLayout]} />
-      <Text style={[styles.yes, styles.noTypo]}>Yes</Text>
-      <Text style={[styles.no, styles.noTypo]}>No</Text>
-      <Text style={[styles.maybe, styles.noTypo]}>Maybe</Text>
-      <Text style={[styles.areYouActively, styles.howOftenDoTypo]}>
-        Are you actively looking to support companies with specific ethical
-        practices?
-      </Text>
-      <View
-        style={[styles.pexelsBenanSude156926722272, styles.pexelsPosition]}
-      />
-      <Text style={[styles.environmentalViolations, styles.andTypo]}>
-        Environmental violations
-      </Text>
-      <Text style={[styles.poorTreatmentOf, styles.andTypo]}>
-        Poor treatment of employees
-      </Text>
-      <Text style={[styles.humanRightsViolations, styles.andTypo]}>
-        Human rights violations
-      </Text>
-      <Text
-        style={[styles.unsustainablePractices, styles.andTypo]}
-      >{`Unsustainable practices `}</Text>
-      <Text
-        style={[styles.employeeIncomeInequaility, styles.andTypo]}
-      >{`Employee income inequaility `}</Text>
-      <Text style={[styles.lackOfTransparency, styles.andTypo]}>
-        Lack of transparency
-      </Text>
-      <Text style={[styles.negativeMediaCoverage, styles.communityTypo]}>
-        Negative media coverage
-      </Text>
-      <Text style={[styles.politicalAffiliations3, styles.communityTypo]}>
-        Political affiliations
-      </Text>
-      <Text style={[styles.poorProductQuality, styles.communityTypo]}>
-        Poor product quality
-      </Text>
-      <Text style={[styles.whatWouldMake, styles.onAScaleTypo]}>
-        What would make you stop supporting a company? (Select all that apply)
-      </Text>
-      <Text style={[styles.howKnowledgeableAre, styles.onAScaleTypo]}>
-        How knowledgeable are you about the following topics? (Rate each topic
-        on a scale from 1 to 5)
-      </Text>
-      <Text
-        style={[styles.corporateSocialResponsibilit, styles.animalTypo]}
-      >{`Corporate social responsibility `}</Text>
-      <View style={[styles.view43, styles.viewPosition8]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view44, styles.viewPosition8]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view45, styles.viewPosition8]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view46, styles.viewPosition8]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view47, styles.viewPosition8]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <Text
-        style={[styles.environmentalSocialAnd, styles.animalTypo]}
-      >{`Environmental, social, and governance `}</Text>
-      <View style={[styles.view48, styles.viewPosition7]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view49, styles.viewPosition7]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view50, styles.viewPosition7]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view51, styles.viewPosition7]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view52, styles.viewPosition7]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <Text style={[styles.fairTradePractices, styles.animalTypo]}>
-        Fair trade practices
-      </Text>
-      <View style={[styles.view53, styles.viewPosition6]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view54, styles.viewPosition6]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view55, styles.viewPosition6]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view56, styles.viewPosition6]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view57, styles.viewPosition6]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <View style={[styles.view58, styles.viewPosition5]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view59, styles.viewPosition5]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view60, styles.viewPosition5]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view61, styles.viewPosition5]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view62, styles.viewPosition5]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <Text style={[styles.humanRights2, styles.animalTypo]}>Human rights</Text>
-      <Text
-        style={[styles.supplyChainEthics2, styles.animalTypo]}
-      >{`Supply chain ethics `}</Text>
-      <View style={[styles.view63, styles.viewPosition4]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view64, styles.viewPosition4]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view65, styles.viewPosition4]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view66, styles.viewPosition4]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view67, styles.viewPosition4]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <Text style={[styles.animalWelfareStandards, styles.animalTypo]}>
-        Animal welfare standards
-      </Text>
-      <View style={[styles.view68, styles.viewPosition3]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view69, styles.viewPosition3]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view70, styles.viewPosition3]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view71, styles.viewPosition3]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view72, styles.viewPosition3]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <Text style={[styles.innovationAndTechnology2, styles.animalTypo]}>
-        Innovation and technology
-      </Text>
-      <View style={[styles.view73, styles.viewPosition2]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view74, styles.viewPosition2]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view75, styles.viewPosition2]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view76, styles.viewPosition2]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view77, styles.viewPosition2]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <Text style={[styles.diversityAndInclusion2, styles.animalTypo]}>
-        Diversity and inclusion
-      </Text>
-      <View style={[styles.view78, styles.viewPosition1]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view79, styles.viewPosition1]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view80, styles.viewPosition1]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view81, styles.viewPosition1]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view82, styles.viewPosition1]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <View style={[styles.view83, styles.viewPosition]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-2.png")}
-        />
-        <Text style={styles.text}>1</Text>
-      </View>
-      <View style={[styles.view84, styles.viewPosition]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-3.png")}
-        />
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.view85, styles.viewPosition]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-4.png")}
-        />
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.view86, styles.viewPosition]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-5.png")}
-        />
-        <Text style={styles.text}>4</Text>
-      </View>
-      <View style={[styles.view87, styles.viewPosition]}>
-        <Image
-          style={[styles.child, styles.viewLayout]}
-          contentFit="cover"
-          source={require("assets/ellipse-6.png")}
-        />
-        <Text style={styles.text}>5</Text>
-      </View>
-      <View
-        style={[styles.pexelsBenanSude156926722273, styles.pexelsPosition]}
-      />
-      <Text style={[styles.always, styles.textTypo]}>Always</Text>
-      <Text style={[styles.often, styles.textTypo]}>Often</Text>
-      <Text style={[styles.sometimes, styles.textTypo]}>Sometimes</Text>
-      <Text style={[styles.rarely, styles.textTypo]}>Rarely</Text>
-      <Text style={[styles.never, styles.textTypo]}>Never</Text>
-      <Text style={[styles.howOftenDo1, styles.doYouHaveTypo]}>
-        How often do you make purchasing decisions based on a company's ethical
-        practices?
-      </Text>
-      <View
-        style={[styles.pexelsBenanSude156926722274, styles.pexelsPosition]}
-      />
-      <Text style={[styles.notImportant, styles.textTypo]}>
-        1 (Not important)
-      </Text>
-      <Text style={[styles.text88, styles.textTypo]}>2</Text>
-      <Text style={[styles.text89, styles.textTypo]}>3</Text>
-      <Text style={[styles.text90, styles.textTypo]}>4</Text>
-      <Text style={[styles.veryImportant, styles.textTypo]}>
-        5 (Very important)
-      </Text>
-      <Text style={[styles.onAScale, styles.onAScaleTypo]}>
-        On a scale from 1 to 5, how important is it for you to align your
-        purchases with your values?
-      </Text>
-      <Text style={[styles.doYouHave, styles.doYouHaveTypo]}>
-        Do you have any specific companies in mind that you would like to
-        support?
-      </Text>
-      </View>
-          </ScrollView>
-        </ImageBackground>
-      </Animated.View>
-    </PanGestureHandler>
+      {question.description && (
+        <Text style={styles.description}>{question.description}</Text>
+      )}
+      {children}
+      {error && <Text style={styles.error}>{error}</Text>}
+    </View>
   );
 };
 
+BaseQuestion.propTypes = {
+  question: PropTypes.shape(BaseQuestionPropTypes).isRequired,
+  error: PropTypes.string,
+  isRequired: PropTypes.bool,
+  children: PropTypes.node
+};
+
 const styles = StyleSheet.create({
-    background: {
-      flex: 1,
-      width: '100%',
-      height: '100%',
-    },
-    scrollViewContent: {
-      flexGrow: 1,
-      justifyContent: 'center',
-    },
-  surveyLayout: {
-    width: 403,
-    borderRadius: Border.br_sm,
-    position: "absolute",
-    left: 12,
-  },
-  viewLayout: {
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition16: {
-    top: 900,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition15: {
-    top: 1046,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition14: {
-    top: 1354,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition13: {
-    top: 1504,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition12: {
-    top: 1428,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition11: {
-    top: 1203,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition10: {
-    top: 972,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  whatTypo: {
-    textAlign: "left",
-    fontFamily: FontFamily.ralewayBold,
-    fontWeight: "700",
-    lineHeight: 20,
-    fontSize: 20,
-    color: Color.white,
-    position: "absolute",
-  },
-  communityTypo: {
-    fontFamily: FontFamily.ralewayMedium,
-    fontWeight: "500",
-    textAlign: "left",
-    fontSize: 20,
-    color: Color.white,
-    position: "absolute",
-  },
-  priceTypo: {
-    left: 78,
-    fontFamily: FontFamily.ralewayMedium,
-    fontWeight: "500",
-    textAlign: "left",
-    fontSize: 20,
-    color: Color.white,
-    position: "absolute",
-  },
-  howOftenDoTypo: {
-    width: 392,
-    left: 31,
-    textAlign: "left",
-    fontFamily: FontFamily.ralewayBold,
-    fontWeight: "700",
-    lineHeight: 20,
-    fontSize: 20,
-    color: Color.white,
-    position: "absolute",
-  },
-  animalTypo: {
-    letterSpacing: -1.1,
-    fontFamily: FontFamily.ralewayMedium,
-    fontWeight: "500",
-    lineHeight: 18,
-    textAlign: "left",
-    fontSize: 20,
-    color: Color.white,
-    position: "absolute",
-  },
-  humanRights1Typo: {
-    left: 83,
-    letterSpacing: -1.1,
-    fontFamily: FontFamily.ralewayMedium,
-    fontWeight: "500",
-    lineHeight: 18,
-    textAlign: "left",
-    fontSize: 20,
-    color: Color.white,
-    position: "absolute",
-  },
-  viewPosition9: {
-    top: 1277,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  pexelsLayout: {
-    height: 830,
-    width: 1105,
-    position: "absolute",
-  },
-  andTypo: {
-    left: 70,
-    fontFamily: FontFamily.ralewayMedium,
-    fontWeight: "500",
-    textAlign: "left",
-    fontSize: 20,
-    color: Color.white,
-    position: "absolute",
-  },
-  textTypo: {
-    left: 71,
-    fontFamily: FontFamily.ralewayMedium,
-    fontWeight: "500",
-    textAlign: "left",
-    fontSize: FontSize.size_lg,
-    color: Color.white,
-    position: "absolute",
-  },
-  whatLayout: {
-    width: 372,
-    left: 31,
-  },
-  noTypo: {
-    fontFamily: FontFamily.ralewayLight,
-    fontWeight: "300",
-    left: 70,
-    textAlign: "left",
-    fontSize: FontSize.size_xl,
-    color: Color.white,
-    position: "absolute",
-  },
-  pexelsPosition: {
-    left: 622,
-    height: 830,
-    width: 1105,
-    position: "absolute",
-  },
-  onAScaleTypo: {
-    letterSpacing: -1.2,
-    textAlign: "left",
-    fontFamily: FontFamily.ralewayBold,
-    fontWeight: "700",
-    lineHeight: 20,
-    fontSize: FontSize.size_xl,
-    color: Color.white,
-    position: "absolute",
-  },
-  viewPosition8: {
-    top: 2440,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition7: {
-    top: 2525,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition6: {
-    top: 2611,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition5: {
-    top: 2697,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition4: {
-    top: 2781,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition3: {
-    top: 2874,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition2: {
-    top: 2957,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition1: {
-    top: 3045,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  viewPosition: {
-    top: 1124,
-    height: 24,
-    width: 26,
-    position: "absolute",
-  },
-  doYouHaveTypo: {
-    width: 373,
-    letterSpacing: -1.2,
-    textAlign: "left",
-    fontFamily: FontFamily.ralewayBold,
-    fontWeight: "700",
-    lineHeight: 20,
-    fontSize: FontSize.size_xl,
-    color: Color.white,
-    position: "absolute",
-  },
-  surveyChild: {
-    top: 4266,
-    height: 899,
-  },
-  surveyItem: {
-    top: 194,
-    height: 1373,
-  },
-  surveyInner: {
-    top: 3127,
-    height: 1121,
-  },
-  rectangleIcon: {
-    top: 1592,
-    height: 1504,
-  },
-  align: {
-    top: 76,
-    left: 98,
-    fontSize: 68,
-    lineHeight: 68,
-    fontFamily: FontFamily.sonder,
-    width: 238,
-    transform: [
-      {
-        rotate: "-0.2deg",
-      },
-    ],
-    height: 56,
-    textAlign: "center",
-    color: Color.white,
-    textShadowRadius: 4,
-    textShadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    textShadowColor: "rgba(0, 0, 0, 0.25)",
-    position: "absolute",
-  },
-  personalizationSurvey: {
-    top: 150,
-    left: 55,
-    letterSpacing: 1.2,
-    fontFamily: FontFamily.ralewayRegular,
-    width: 312,
-    lineHeight: 20,
-    fontSize: FontSize.size_xl,
-    transform: [
-      {
-        rotate: "-0.2deg",
-      },
-    ],
-    textShadowRadius: 4,
-    textShadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    textShadowColor: "rgba(0, 0, 0, 0.25)",
-    height: 56,
-    textAlign: "center",
-    color: Color.white,
-    position: "absolute",
-  },
-  child: {
-    top: 0,
-    left: 0,
-  },
-  text: {
-    top: 3,
-    left: 8,
-    fontFamily: FontFamily.overpassBold,
-    width: 10,
-    height: 11,
-    fontWeight: "700",
-    fontSize: FontSize.size_lg,
-    textAlign: "center",
-    color: Color.white,
-    position: "absolute",
-  },
-  view: {
-    left: 87,
-    top: 829,
-    height: 24,
-    width: 26,
-  },
-  view1: {
-    left: 153,
-    top: 829,
-    height: 24,
-    width: 26,
-  },
-  view2: {
-    left: 186,
-    top: 829,
-    height: 24,
-    width: 26,
-  },
-  view3: {
-    left: 219,
-    top: 829,
-    height: 24,
-    width: 26,
-  },
-  view4: {
-    left: 85,
-  },
-  view5: {
-    left: 118,
-  },
-  view6: {
-    left: 121,
-    top: 829,
-    height: 24,
-    width: 26,
-  },
-  view7: {
-    left: 151,
-  },
-  view8: {
-    left: 184,
-  },
-  view9: {
-    left: 217,
-  },
-  view10: {
-    left: 86,
-  },
-  view11: {
-    left: 119,
-  },
-  view12: {
-    left: 152,
-  },
-  view13: {
-    left: 185,
-  },
-  view14: {
-    left: 218,
-  },
-  view15: {
-    left: 88,
-  },
-  view16: {
-    left: 121,
-  },
-  view17: {
-    left: 154,
-  },
-  view18: {
-    left: 187,
-  },
-  view19: {
-    left: 220,
-  },
-  view20: {
-    left: 87,
-  },
-  view21: {
-    left: 120,
-  },
-  view22: {
-    left: 153,
-  },
-  view23: {
-    left: 186,
-  },
-  view24: {
-    left: 219,
-  },
-  view25: {
-    left: 88,
-  },
-  view26: {
-    left: 121,
-  },
-  view27: {
-    left: 154,
-  },
-  view28: {
-    left: 187,
-  },
-  view29: {
-    left: 220,
-  },
-  view30: {
-    left: 87,
-  },
-  view31: {
-    left: 120,
-  },
-  view32: {
-    left: 153,
-  },
-  view33: {
-    left: 186,
-  },
-  view34: {
-    left: 118,
-  },
-  view35: {
-    left: 151,
-  },
-  view36: {
-    left: 184,
-  },
-  view37: {
-    left: 217,
-  },
-  whatValuesAre: {
-    top: 214,
-    width: 377,
-    left: 20,
-    fontFamily: FontFamily.ralewayBold,
-  },
-  environmentalProtectionsusta: {
-    top: 292,
-    width: 299,
-    lineHeight: 18,
-    left: 68,
-    fontWeight: "500",
-  },
-  socialJustice: {
-    top: 350,
-    left: 68,
-    fontWeight: "500",
-  },
-  humanRights: {
-    top: 393,
-    left: 68,
-    fontWeight: "500",
-  },
-  fairLaborPractices: {
-    top: 436,
-    left: 68,
-    fontWeight: "500",
-  },
-  supplyChainEthics: {
-    top: 479,
-    left: 68,
-    fontWeight: "500",
-  },
-  communityInvolvement: {
-    top: 522,
-    left: 68,
-    fontWeight: "500",
-  },
-  diversityAndInclusion: {
-    top: 565,
-    left: 68,
-    fontWeight: "500",
-  },
-  innovationAndTechnology: {
-    top: 608,
-    left: 68,
-    fontWeight: "500",
-  },
-  animalWelfare: {
-    top: 651,
-    left: 68,
-    fontWeight: "500",
-  },
-  politicalAffiliations: {
-    top: 691,
-    left: 66,
-  },
-  brandReputation: {
-    top: 1994,
-  },
-  price: {
-    top: 2037,
-  },
-  ethicalPractices: {
-    top: 2080,
-  },
-  environmentalImpact: {
-    top: 2123,
-  },
-  productQuality: {
-    top: 2166,
-  },
-  recommendationsFromFriendsf: {
-    top: 2209,
-    width: 279,
-  },
-  politicalAffiliations1: {
-    top: 2272,
-    width: 279,
-  },
-  clothing: {
-    top: 1689,
-    lineHeight: 18,
-  },
-  foodAndBeverage: {
-    top: 1729,
-  },
-  householdGoods: {
-    top: 1772,
-  },
-  personalCareProducts: {
-    top: 1815,
-  },
-  electronics: {
-    top: 1858,
-  },
-  howWouldYou: {
-    top: 746,
-    width: 385,
-    left: 31,
-  },
-  howOftenDo: {
-    top: 1606,
-    textShadowRadius: 4,
-    textShadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    textShadowColor: "rgba(0, 0, 0, 0.25)",
-    width: 392,
-  },
-  whatFactorsInfluence: {
-    top: 1918,
-    width: 382,
-    left: 31,
-  },
-  environmentalProtectionSust: {
-    top: 800,
-    left: 82,
-  },
-  supplyChainEthics1: {
-    top: 1093,
-    left: 85,
-  },
-  socialJustice1: {
-    top: 871,
-  },
-  communityInvolvement1: {
-    top: 1171,
-    left: 85,
-  },
-  fairLaborPractices1: {
-    top: 1017,
-  },
-  innovationAndTechnology1: {
-    top: 1323,
-    left: 86,
-  },
-  diversityAndInclusion1: {
-    top: 1249,
-    left: 84,
-  },
-  humanRights1: {
-    top: 943,
-  },
-  animalWelfare1: {
-    top: 1400,
-    left: 86,
-  },
-  view38: {
-    left: 87,
-  },
-  view39: {
-    left: 120,
-  },
-  view40: {
-    left: 153,
-  },
-  view41: {
-    left: 186,
-  },
-  view42: {
-    left: 219,
-  },
-  politicalAffiliations2: {
-    top: 1474,
-    left: 86,
-  },
-  pexelsBenanSude15692672227: {
-    top: 2537,
-    left: 629,
-  },
-  ethicalAndSustainability: {
-    top: 3451,
-  },
-  companyHistoryAnd: {
-    top: 3494,
-  },
-  recentNewsAnd: {
-    top: 3537,
-  },
-  customerReviews: {
-    top: 3580,
-  },
-  financialPerformance: {
-    top: 3623,
-  },
-  recommendationsFromFriendsf1: {
-    top: 3666,
-    width: 279,
-  },
-  honestyAndTransparency: {
-    top: 3734,
-    width: 279,
-  },
-  whatFactorsInfluence1: {
-    top: 3371,
-    textAlign: "left",
-    fontFamily: FontFamily.ralewayBold,
-    fontWeight: "700",
-    lineHeight: 20,
-    fontSize: FontSize.size_xl,
-    color: Color.white,
-    position: "absolute",
-  },
-  pexelsBenanSude156926722271: {
-    top: 3923,
-    left: 621,
-  },
-  yes: {
-    top: 3226,
-  },
-  no: {
-    top: 3269,
-  },
-  maybe: {
-    top: 3312,
-  },
-  areYouActively: {
-    top: 3146,
-  },
-  pexelsBenanSude156926722272: {
-    top: 3735,
-  },
-  environmentalViolations: {
-    top: 3855,
-  },
-  poorTreatmentOf: {
-    top: 3898,
-  },
-  humanRightsViolations: {
-    top: 3941,
-  },
-  unsustainablePractices: {
-    top: 3984,
-  },
-  employeeIncomeInequaility: {
-    top: 4027,
-  },
-  lackOfTransparency: {
-    top: 4070,
-    width: 279,
-  },
-  negativeMediaCoverage: {
-    top: 4109,
-    width: 279,
-    left: 68,
-    fontWeight: "500",
-  },
-  politicalAffiliations3: {
-    top: 4194,
-    width: 279,
-    left: 68,
-    fontWeight: "500",
-  },
-  poorProductQuality: {
-    top: 4152,
-    width: 279,
-    left: 68,
-    fontWeight: "500",
-  },
-  whatWouldMake: {
-    top: 3783,
-    width: 372,
-    left: 31,
-  },
-  howKnowledgeableAre: {
-    top: 2338,
-    width: 367,
-    left: 31,
-  },
-  corporateSocialResponsibilit: {
-    top: 2414,
-    left: 88,
-  },
-  view43: {
-    left: 89,
-  },
-  view44: {
-    left: 122,
-  },
-  view45: {
-    left: 155,
-  },
-  view46: {
-    left: 188,
-  },
-  view47: {
-    left: 221,
-  },
-  environmentalSocialAnd: {
-    top: 2499,
-    left: 91,
-  },
-  view48: {
-    left: 91,
-  },
-  view49: {
-    left: 124,
-  },
-  view50: {
-    left: 157,
-  },
-  view51: {
-    left: 190,
-  },
-  view52: {
-    left: 223,
-  },
-  fairTradePractices: {
-    top: 2585,
-    left: 92,
-  },
-  view53: {
-    left: 95,
-  },
-  view54: {
-    left: 128,
-  },
-  view55: {
-    left: 161,
-  },
-  view56: {
-    left: 194,
-  },
-  view57: {
-    left: 227,
-  },
-  view58: {
-    left: 95,
-  },
-  view59: {
-    left: 128,
-  },
-  view60: {
-    left: 161,
-  },
-  view61: {
-    left: 194,
-  },
-  view62: {
-    left: 227,
-  },
-  humanRights2: {
-    top: 2669,
-    left: 96,
-  },
-  supplyChainEthics2: {
-    top: 2835,
-    left: 97,
-  },
-  view63: {
-    left: 97,
-  },
-  view64: {
-    left: 130,
-  },
-  view65: {
-    left: 163,
-  },
-  view66: {
-    left: 196,
-  },
-  view67: {
-    left: 229,
-  },
-  animalWelfareStandards: {
-    top: 2754,
-    left: 95,
-  },
-  view68: {
-    left: 97,
-  },
-  view69: {
-    left: 130,
-  },
-  view70: {
-    left: 163,
-  },
-  view71: {
-    left: 196,
-  },
-  view72: {
-    left: 229,
-  },
-  innovationAndTechnology2: {
-    top: 2930,
-    left: 96,
-  },
-  view73: {
-    left: 97,
-  },
-  view74: {
-    left: 130,
-  },
-  view75: {
-    left: 163,
-  },
-  view76: {
-    left: 196,
-  },
-  view77: {
-    left: 229,
-  },
-  diversityAndInclusion2: {
-    top: 3021,
-    left: 95,
-  },
-  view78: {
-    left: 96,
-  },
-  view79: {
-    left: 129,
-  },
-  view80: {
-    left: 162,
-  },
-  view81: {
-    left: 195,
-  },
-  view82: {
-    left: 228,
-  },
-  view83: {
-    left: 87,
-  },
-  view84: {
-    left: 120,
-  },
-  view85: {
-    left: 153,
-  },
-  view86: {
-    left: 186,
-  },
-  view87: {
-    left: 219,
-  },
-  pexelsBenanSude156926722273: {
-    top: 4432,
-  },
-  always: {
-    top: 4378,
-  },
-  often: {
-    top: 4421,
-  },
-  sometimes: {
-    top: 4464,
-  },
-  rarely: {
-    top: 4507,
-  },
-  never: {
-    top: 4550,
-  },
-  howOftenDo1: {
-    top: 4296,
-    left: 30,
-  },
-  pexelsBenanSude156926722274: {
-    top: 4737,
-  },
-  notImportant: {
-    top: 4683,
-  },
-  text88: {
-    top: 4726,
-  },
-  text89: {
-    top: 4769,
-  },
-  text90: {
-    top: 4812,
-  },
-  veryImportant: {
-    top: 4855,
-  },
-  onAScale: {
-    top: 4600,
-    left: 35,
-    width: 363,
-  },
-  doYouHave: {
-    top: 4929,
-    left: 33,
-  },
-  survey: {
-    borderRadius: Border.br_xl,
-    borderStyle: "solid",
-    borderColor: "#2c8eb5",
-    borderWidth: 1,
-    flex: 1,
-    width: "100%",
-    height: 5200,
-    overflow: "hidden",
+  container: {
+    padding: Theme.spacing.md,
+    backgroundColor: Theme.colors.background,
+    borderRadius: Theme.borderRadius.medium,
+    marginBottom: Theme.spacing.md,
+  },
+  category: {
+    fontSize: 14,
+    color: Theme.colors.primary,
+    marginBottom: Theme.spacing.sm,
+    fontFamily: Theme.fonts.medium,
+  },
+  question: {
+    fontSize: 18,
+    color: Theme.colors.text,
+    marginBottom: Theme.spacing.sm,
+    fontFamily: Theme.fonts.bold,
+  },
+  description: {
+    fontSize: 14,
+    color: Theme.colors.secondary,
+    marginBottom: Theme.spacing.md,
+    fontFamily: Theme.fonts.regular,
+  },
+  required: {
+    color: Theme.colors.error,
+  },
+  error: {
+    color: Theme.colors.error,
+    fontSize: 14,
+    marginTop: Theme.spacing.sm,
+    fontFamily: Theme.fonts.regular,
   },
 });
 
-export default Survey;
+export default BaseQuestion;
+
+// components/Survey/QuestionTypes/ScaleQuestion.js
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
+import Slider from '@react-native-community/slider';
+import BaseQuestion from './BaseQuestion';
+import { Theme } from '../../../config/theme';
+import { ScaleQuestionPropTypes } from '../../../constants/propTypes';
+
+const ScaleQuestion = ({ question, value, onChange }) => {
+  return (
+    <BaseQuestion question={question} isRequired={question.required}>
+      <View style={styles.sliderContainer}>
+        <Slider
+          style={styles.slider}
+          minimumValue={1}
+          maximumValue={5}
+          step={1}
+          value={value}
+          onValueChange={onChange}
+          minimumTrackTintColor={Theme.colors.primary}
+          maximumTrackTintColor={Theme.colors.border}
+        />
+        <View style={styles.labels}>
+          {question.options.map((option) => (
+            <Text
+              key={option.value}
+              style={[
+                styles.label,
+                value === option.value && styles.selectedLabel,
+              ]}
+            >
+              {option.label}
+            </Text>
+          ))}
+        </View>
+      </View>
+    </BaseQuestion>
+  );
+};
+
+ScaleQuestion.propTypes = {
+  question: PropTypes.shape(ScaleQuestionPropTypes).isRequired,
+  value: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
+const styles = StyleSheet.create({
+  sliderContainer: {
+    marginTop: Theme.spacing.md,
+  },
+  slider: {
+    height: 40,
+  },
+  labels: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: Theme.spacing.sm,
+  },
+  label: {
+    fontSize: 12,
+    color: Theme.colors.secondary,
+    textAlign: 'center',
+    flex: 1,
+  },
+  selectedLabel: {
+    color: Theme.colors.primary,
+    fontFamily: Theme.fonts.medium,
+  },
+});
+
+export default ScaleQuestion;
+
+// components/Survey/QuestionTypes/MultiSelectQuestion.js
+import React from 'react';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
+import BaseQuestion from './BaseQuestion';
+import { Theme } from '../../../config/theme';
+import { MultiSelectQuestionPropTypes } from '../../../constants/propTypes';
+
+const MultiSelectQuestion = ({ question, value = [], onChange }) => {
+  const handleSelect = (optionValue) => {
+    const newValue = value.includes(optionValue)
+      ? value.filter(v => v !== optionValue)
+      : [...value, optionValue];
+    
+    if (question.maxSelections && newValue.length > question.maxSelections) {
+      return;
+    }
+    
+    onChange(newValue);
+  };
+
+  return (
+    <BaseQuestion question={question} isRequired={question.required}>
+      <View style={styles.optionsContainer}>
+        {question.options.map((option) => (
+          <TouchableOpacity
+            key={option.value}
+            style={[
+              styles.option,
+              value.includes(option.value) && styles.selectedOption,
+            ]}
+            onPress={() => handleSelect(option.value)}
+          >
+            <Text
+              style={[
+                styles.optionText,
+                value.includes(option.value) && styles.selectedOptionText,
+              ]}
+            >
+              {option.label}
+            </Text>
+            {option.description && (
+              <Text style={styles.optionDescription}>{option.description}</Text>
+            )}
+          </TouchableOpacity>
+        ))}
+      </View>
+    </BaseQuestion>
+  );
+};
+
+MultiSelectQuestion.propTypes = {
+  question: PropTypes.shape(MultiSelectQuestionPropTypes).isRequired,
+  value: PropTypes.arrayOf(PropTypes.string),
+  onChange: PropTypes.func.isRequired,
+};
+
+const styles = StyleSheet.create({
+  optionsContainer: {
+    flexDirection: 'column',
+    gap: Theme.spacing.sm,
+  },
+  option: {
+    padding: Theme.spacing.md,
+    borderRadius: Theme.borderRadius.small,
+    borderWidth: 1,
+    borderColor: Theme.colors.border,
+  },
+  selectedOption: {
+    backgroundColor: Theme.colors.primaryLight,
+    borderColor: Theme.colors.primary,
+  },
+  optionText: {
+    fontSize: 16,
+    color: Theme.colors.text,
+    fontFamily: Theme.fonts.medium,
+  },
+  selectedOptionText: {
+    color: Theme.colors.primary,
+  },
+  optionDescription: {
+    fontSize: 14,
+    color: Theme.colors.secondary,
+    marginTop: Theme.spacing.xs,
+    fontFamily: Theme.fonts.regular,
+  },
+});
+
+export default MultiSelectQuestion;
+
+// components/Survey/QuestionTypes/SingleSelectQuestion.js
+import React from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, Animated } from 'react-native';
+import PropTypes from 'prop-types';
+import BaseQuestion from './BaseQuestion';
+import { Theme } from '../../../config/theme';
+import { SingleSelectQuestionPropTypes } from '../../../constants/propTypes';
+
+const SingleSelectQuestion = ({ question, value, onChange }) => {
+  const scaleAnimation = React.useRef(new Animated.Value(1)).current;
+
+  const handlePress = (optionValue) => {
+    Animated.sequence([
+      Animated.timing(scaleAnimation, {
+        toValue: 0.95,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnimation, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    onChange(optionValue);
+  };
+
+  return (
+    <BaseQuestion question={question} isRequired={question.required}>
+      <View style={styles.optionsContainer}>
+        {question.options.map((option) => (
+          <Animated.View
+            key={option.value}
+            style={[
+              styles.optionWrapper,
+              { transform: [{ scale: scaleAnimation }] },
+            ]}
+          >
+            <TouchableOpacity
+              style={[
+                styles.option,
+                value === option.value && styles.selectedOption,
+              ]}
+              onPress={() => handlePress(option.value)}
+            >
+              <Text
+                style={[
+                  styles.optionText,
+                  value === option.value && styles.selectedOptionText,
+                ]}
+              >
+                {option.label}
+              </Text>
+            </TouchableOpacity>
+          </Animated.View>
+        ))}
+      </View>
+    </BaseQuestion>
+  );
+};
+
+SingleSelectQuestion.propTypes = {
+  question: PropTypes.shape(SingleSelectQuestionPropTypes).isRequired,
+  value: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+};
+
+const styles = StyleSheet.create({
+  optionsContainer: {
+    flexDirection: 'column',
+    gap: Theme.spacing.sm,
+  },
+  optionWrapper: {
+    width: '100%',
+  },
+  option: {
+    padding: Theme.spacing.md,
+    borderRadius: Theme.borderRadius.small,
+    borderWidth: 1,
+    borderColor: Theme.colors.border,
+    backgroundColor: Theme.colors.surface,
+  },
+  selectedOption: {
+    backgroundColor: Theme.colors.primaryLight,
+    borderColor: Theme.colors.primary,
+  },
+  optionText: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: Theme.colors.text,
+    fontFamily: Theme.fonts.medium,
+  },
+  selectedOptionText: {
+    color: Theme.colors.primary,
+  },
+});
+
+export default SingleSelectQuestion;
+
+// components/Survey/Navigation/ProgressBar.js
+import React from 'react';
+import { View, Animated, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
+import { Theme } from '../../../config/theme';
+
+const ProgressBar = ({ progress, totalSections, currentSection }) => {
+  const progressAnimation = React.useRef(new Animated.Value(progress)).current;
+
+  React.useEffect(() => {
+    Animated.timing(progressAnimation, {
+      toValue: progress,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  }, [progress]);
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.progressBackground}>
+        <Animated.View
+          style={[
+            styles.progressFill,
+            {
+              width: progressAnimation.interpolate({
+                inputRange: [0, 1],
+                outputRange: ['0%', '100%'],
+              }),
+            },
+          ]}
+        />
+      </View>
+      <View style={styles.sectionIndicators}>
+        {Array(totalSections)
+          .fill(0)
+          .map((_, index) => (
+            <View
+              key={index}
+              style={[
+                styles.sectionDot,
+                index === currentSection && styles.activeDot,
+                index < currentSection && styles.completedDot,
+              ]}
+            />
+          ))}
+      </View>
+    </View>
+  );
+};
+
+ProgressBar.propTypes = {
+  progress: PropTypes.number.isRequired,
+  totalSections: PropTypes.number.isRequired,
+  currentSection: PropTypes.number.isRequired,
+};
+
+const styles = StyleSheet.create({
+  container: {
+    padding: Theme.spacing.md,
+  },
+  progressBackground: {
+    height: 4,
+    backgroundColor: Theme.colors.border,
+    borderRadius: Theme.borderRadius.small,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: Theme.colors.primary,
+  },
+  sectionIndicators: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: Theme.spacing.sm,
+  },
+  sectionDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Theme.colors.border,
+  },
+  activeDot: {
+    backgroundColor: Theme.colors.primary,
+    transform: [{ scale: 1.2 }],
+  },
+  completedDot: {
+    backgroundColor: Theme.colors.primary,
+  },
+});
+
+export default ProgressBar;
+
+// context/SurveyContext.js
+import React, { createContext, useContext, useReducer } from 'react';
+import PropTypes from 'prop-types';
+import { SURVEY_SECTIONS } from '../data/surveyQuestions';
+
+const initialState = {
+  currentSection: 0,
+  completedSections: [],
+  responses: {},
+  valueProfile: {
+    primary: [],
+    secondary: [],
+    flexible: [],
+  },
+  confidence: {},
+  isValid: false,
+  progress: 0,
+};
+
+const SurveyContext = createContext(null);
+
+function surveyReducer(state, action) {
+  switch (action.type) {
+    case 'UPDATE_RESPONSE':
+      return {
+        ...state,
+        responses: {
+          ...state.responses,
+          [action.questionId]: action.value,
+        },
+      };
+    
+    case 'NEXT_SECTION':
+      return {
+        ...state,
+        currentSection: state.currentSection + 1,
+        completedSections: [...state.completedSections, SURVEY_SECTIONS[state.currentSection].id],
+      };
+    
+    case 'PREVIOUS_SECTION':
+      return {
+        ...state,
+        currentSection: Math.max(0, state.currentSection - 1),
+      };
+    
+    case 'UPDATE_PROGRESS':
+      return {
+        ...state,
+        progress: action.progress,
+      };
+    
+    case 'SET_VALIDITY':
+      return {
+        ...state,
+        isValid: action.isValid,
+      };
+    
+    case 'UPDATE_VALUE_PROFILE':
+      return {
+        ...state,
+        valueProfile: action.profile,
+      };
+    
+    default:
+      return state;
+  }
+}
+
+export function SurveyProvider({ children }) {
+  const [state, dispatch] = useReducer(surveyReducer, initialState);
+
+  const validateCurrentSection = () => {
+    const currentSectionQuestions = SURVEY_SECTIONS[state.currentSection].questions;
+    const isValid = currentSectionQuestions.every(question => {
+      if (!question.required) return true;
+      const response = state.responses[question.id];
+      if (Array.isArray(response)) return response.length > 0;
+      return response !== undefined && response !== '';
+    });
+    
+    dispatch({ type: 'SET_VALIDITY', isValid });
+    return isValid;
+  };
+
+  const updateResponse = (questionId, value) => {
+    dispatch({ type: 'UPDATE_RESPONSE', questionId, value });
+  };
+
+  const nextSection = () => {
+    if (validateCurrentSection() && state.currentSection < SURVEY_SECTIONS.length - 1) {
+      dispatch({ type: 'NEXT_SECTION' });
+      const newProgress = (state.currentSection + 1) / SURVEY_SECTIONS.length;
+      dispatch({ type: 'UPDATE_PROGRESS', progress: newProgress });
+    }
+  };
+
+  const previousSection = () => {
+    if (state.currentSection > 0) {
+      dispatch({ type: 'PREVIOUS_SECTION' });
+      const newProgress = (state.currentSection - 1) / SURVEY_SECTIONS.length;
+      dispatch({ type: 'UPDATE_PROGRESS', progress: newProgress });
+    }
+  };
+
+  const value = {
+    state,
+    updateResponse,
+    nextSection,
+    previousSection,
+    validateCurrentSection,
+  };
+
+  return (
+    <SurveyContext.Provider value={value}>
+      {children}
+    </SurveyContext.Provider>
+  );
+}
+
+SurveyProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+export function useSurvey() {
+  const context = useContext(SurveyContext);
+  if (!context) {
+    throw new Error('useSurvey must be used within a SurveyProvider');
+  }
+  return context;
+}
+
+// components/Survey/SurveyContainer.js
+import React from 'react';
+import { View, ScrollView, SafeAreaView, StyleSheet } from 'react-native';
+import { useSurvey } from '../../context/SurveyContext';
+import ProgressBar from './Navigation/ProgressBar';
+import NavigationButtons from './Navigation/NavigationButtons';
+import QuestionRenderer from './QuestionRenderer';
+import { SURVEY_SECTIONS } from '../../data/surveyQuestions';
+import { Theme } from '../../config/theme';
+
+function SurveyContainer() {
+  const {
+    state,
+    updateResponse,
+    nextSection,
+    previousSection,
+    validateCurrentSection,
+  } = useSurvey();
+
+  const currentSection = SURVEY_SECTIONS[state.currentSection];
+
+  const handleResponse = (questionId, value) => {
+    updateResponse(questionId, value);
+    validateCurrentSection();
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <ProgressBar
+        progress={state.progress}
+        totalSections={SURVEY_SECTIONS.length}
+        currentSection={state.currentSection}
+      />
+      
+      <ScrollView style={styles.contentContainer}>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>{currentSection.title}</Text>
+          <Text style={styles.sectionDescription}>
+            {currentSection.description}
+          </Text>
+        </View>
+
+        {currentSection.questions.map((question) => (
+          <QuestionRenderer
+            key={question.id}
+            question={question}
+            value={state.responses[question.id]}
+            onChange={(value) => handleResponse(question.id, value)}
+          />
+        ))}
+      </ScrollView>
+
+      <NavigationButtons
+        onNext={nextSection}
+        onPrevious={previousSection}
+        canGoNext={state.isValid}
+        canGoPrevious={state.currentSection > 0}
+        isLastSection={state.currentSection === SURVEY_SECTIONS.length - 1}
+      />
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Theme.colors.background,
+  },
+  contentContainer: {
+    flex: 1,
+    padding: Theme.spacing.md,
+  },
+  sectionHeader: {
+    marginBottom: Theme.spacing.lg,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontFamily: Theme.fonts.bold,
+    color: Theme.colors.text,
+    marginBottom: Theme.spacing.sm,
+  },
+  sectionDescription: {
+    fontSize: 16,
+    fontFamily: Theme.fonts.regular,
+    color: Theme.colors.secondary,
+  },
+});
+
+export default SurveyContainer;
+
+// components/Survey/QuestionRenderer.js
+import React from 'react';
+import PropTypes from 'prop-types';
+import ScaleQuestion from './QuestionTypes/ScaleQuestion';
+import MultiSelectQuestion from './QuestionTypes/MultiSelectQuestion';
+import SingleSelectQuestion from './QuestionTypes/SingleSelectQuestion';
+import OpenEndedQuestion from './QuestionTypes/OpenEndedQuestion';
+
+function QuestionRenderer({ question, value, onChange }) {
+  const renderQuestion = () => {
+    switch (question.type) {
+      case 'scale':
+        return (
+          <ScaleQuestion
+            question={question}
+            value={value || 1}
+            onChange={onChange}
+          />
+        );
+      case 'multiSelect':
+        return (
+          <MultiSelectQuestion
+            question={question}
+            value={value || []}
+            onChange={onChange}
+          />
+        );
+      case 'singleSelect':
+        return (
+          <SingleSelectQuestion
+            question={question}
+            value={value || ''}
+            onChange={onChange}
+          />
+        );
+      case 'openEnded':
+        return (
+          <OpenEndedQuestion
+            question={question}
+            value={value || ''}
+            onChange={onChange}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+  return renderQuestion();
+}
+
+QuestionRenderer.propTypes = {
+  question: PropTypes.shape({
+    type: PropTypes.oneOf(['scale', 'multiSelect', 'singleSelect', 'openEnded']).isRequired,
+    // ... other question props
+  }).isRequired,
+  value: PropTypes.any,
+  onChange: PropTypes.func.isRequired,
+};
+
+export default QuestionRenderer;
+
+// utils/validation.js
+export const validateQuestion = (question, value) => {
+  if (question.required) {
+    if (value === undefined || value === null || value === '') {
+      return 'This question is required';
+    }
+
+    if (Array.isArray(value) && value.length === 0) {
+      return 'Please select at least one option';
+    }
+  }
+
+  if (question.type === 'multiSelect') {
+    if (question.minSelections && value.length < question.minSelections) {
+      return `Please select at least ${question.minSelections} options`;
+    }
+    if (question.maxSelections && value.length > question.maxSelections) {
+      return `Please select no more than ${question.maxSelections} options`;
+    }
+  }
+
+  return null;
+};
+
+// services/api.js
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+export const SurveyAPI = {
+  async submitSurvey(surveyData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/surveys`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add any auth headers here
+        },
+        body: JSON.stringify(surveyData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit survey');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Survey submission error:', error);
+      throw error;
+    }
+  },
+
+  async saveDraft(userId, surveyData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/surveys/draft/${userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(surveyData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save draft');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Draft saving error:', error);
+      throw error;
+    }
+  },
+};
+
+// components/Survey/LoadingState.js
+import React from 'react';
+import { View, ActivityIndicator, Text, StyleSheet } from 'react-native';
+import { Theme } from '../../config/theme';
+
+function LoadingState({ message = 'Loading...' }) {
+  return (
+    <View style={styles.container}>
+      <ActivityIndicator size="large" color={Theme.colors.primary} />
+      <Text style={styles.message}>{message}</Text>
+    </View>
+  );
+}
+
+LoadingState.propTypes = {
+  message: PropTypes.string,
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Theme.colors.background,
+    padding: Theme.spacing.lg,
+  },
+  message: {
+    marginTop: Theme.spacing.md,
+    color: Theme.colors.text,
+    fontSize: 16,
+    fontFamily: Theme.fonts.medium,
+  },
+});
+
+export default LoadingState;
+
+// components/Survey/ErrorState.js
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Theme } from '../../config/theme';
+
+function ErrorState({ message = 'Something went wrong', onRetry }) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.message}>{message}</Text>
+      {onRetry && (
+        <TouchableOpacity style={styles.retryButton} onPress={onRetry}>
+          <Text style={styles.retryText}>Try Again</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+}
+
+ErrorState.propTypes = {
+  message: PropTypes.string,
+  onRetry: PropTypes.func,
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Theme.colors.background,
+    padding: Theme.spacing.lg,
+  },
+  message: {
+    color: Theme.colors.error,
+    fontSize: 16,
+    fontFamily: Theme.fonts.medium,
+    textAlign: 'center',
+    marginBottom: Theme.spacing.md,
+  },
+  retryButton: {
+    backgroundColor: Theme.colors.primary,
+    paddingHorizontal: Theme.spacing.lg,
+    paddingVertical: Theme.spacing.md,
+    borderRadius: Theme.borderRadius.medium,
+  },
+  retryText: {
+    color: Theme.colors.white,
+    fontSize: 16,
+    fontFamily: Theme.fonts.medium,
+  },
+});
+
+export default ErrorState;
+
+// utils/animations.js
+import { Animated, Easing } from 'react-native';
+
+export const Animations = {
+  fadeIn: (value, duration = 300) => {
+    return Animated.timing(value, {
+      toValue: 1,
+      duration,
+      useNativeDriver: true,
+      easing: Easing.ease,
+    });
+  },
+
+  fadeOut: (value, duration = 300) => {
+    return Animated.timing(value, {
+      toValue: 0,
+      duration,
+      useNativeDriver: true,
+      easing: Easing.ease,
+    });
+  },
+
+  slideIn: (value, duration = 300) => {
+    return Animated.spring(value, {
+      toValue: 0,
+      useNativeDriver: true,
+      damping: 20,
+      mass: 1,
+      stiffness: 100,
+    });
+  },
+
+  scaleButton: (value) => {
+    return Animated.sequence([
+      Animated.timing(value, {
+        toValue: 0.95,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(value, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]);
+  },
+};
+
+// components/Survey/AnimatedSection.js
+import React, { useEffect, useRef } from 'react';
+import { Animated } from 'react-native';
+import PropTypes from 'prop-types';
+import { Animations } from '../../utils/animations';
+
+function AnimatedSection({ children, index, currentIndex }) {
+  const opacity = useRef(new Animated.Value(0)).current;
+  const translateX = useRef(new Animated.Value(100)).current;
+
+  useEffect(() => {
+    if (index === currentIndex) {
+      Animated.parallel([
+        Animations.fadeIn(opacity),
+        Animations.slideIn(translateX),
+      ]).start();
+    }
+  }, [currentIndex]);
+
+  return (
+    <Animated.View
+      style={{
+        opacity,
+        transform: [{ translateX }],
+      }}
+    >
+      {children}
+    </Animated.View>
+  );
+}
+
+AnimatedSection.propTypes = {
+  children: PropTypes.node.isRequired,
+  index: PropTypes.number.isRequired,
+  currentIndex: PropTypes.number.isRequired,
+};
+
+export default AnimatedSection;
+
+// components/Survey/AccessibilityWrapper.js
+import React from 'react';
+import { View, AccessibilityInfo } from 'react-native';
+import PropTypes from 'prop-types';
+
+function AccessibilityWrapper({ 
+  children, 
+  label, 
+  hint, 
+  role = 'none',
+  onAccessibilityTap,
+  importantForAccessibility = 'yes',
+}) {
+  const announceAccessibility = () => {
+    if (hint) {
+      AccessibilityInfo.announceForAccessibility(hint);
+    }
+    if (onAccessibilityTap) {
+      onAccessibilityTap();
+    }
+  };
+
+  return (
+    <View
+      accessible
+      accessibilityLabel={label}
+      accessibilityHint={hint}
+      accessibilityRole={role}
+      importantForAccessibility={importantForAccessibility}
+      onAccessibilityTap={announceAccessibility}
+    >
+      {children}
+    </View>
+  );
+}
+
+AccessibilityWrapper.propTypes = {
+  children: PropTypes.node.isRequired,
+  label: PropTypes.string,
+  hint: PropTypes.string,
+  role: PropTypes.string,
+  onAccessibilityTap: PropTypes.func,
+  importantForAccessibility: PropTypes.oneOf(['yes', 'no', 'no-hide-descendants']),
+};
+
+export default AccessibilityWrapper;
+
+// components/Survey/TransitionView.js
+import React, { useEffect, useRef } from 'react';
+import { Animated } from 'react-native';
+import PropTypes from 'prop-types';
+
+function TransitionView({ children, isVisible, style }) {
+  const opacity = useRef(new Animated.Value(isVisible ? 1 : 0)).current;
+  const translateY = useRef(new Animated.Value(isVisible ? 0 : 50)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(opacity, {
+        toValue: isVisible ? 1 : 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.spring(translateY, {
+        toValue: isVisible ? 0 : 50,
+        damping: 20,
+        mass: 1,
+        stiffness: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [isVisible]);
+
+  return (
+    <Animated.View
+      style={[
+        style,
+        {
+          opacity,
+          transform: [{ translateY }],
+        },
+      ]}
+    >
+      {children}
+    </Animated.View>
+  );
+}
+
+TransitionView.propTypes = {
+  children: PropTypes.node.isRequired,
+  isVisible: PropTypes.bool.isRequired,
+  style: PropTypes.object,
+};
+
+export default TransitionView;
+
+// utils/accessibility.js
+export const AccessibilityUtils = {
+  announce: (message) => {
+    AccessibilityInfo.announceForAccessibility(message);
+  },
+
+  updateScreenReader: async () => {
+    try {
+      const isEnabled = await AccessibilityInfo.isScreenReaderEnabled();
+      return isEnabled;
+    } catch (error) {
+      console.error('Error checking screen reader:', error);
+      return false;
+    }
+  },
+
+  getAccessibilityLabel: (question) => {
+    const required = question.required ? 'Required. ' : '';
+    return `${required}${question.category}. ${question.question}`;
+  },
+
+  getAccessibilityHint: (question) => {
+    switch (question.type) {
+      case 'scale':
+        return 'Slide to select a value between 1 and 5';
+      case 'multiSelect':
+        return 'Double tap to select multiple options';
+      case 'singleSelect':
+        return 'Double tap to select one option';
+      case 'openEnded':
+        return 'Double tap to enter text';
+      default:
+        return '';
+    }
+  },
+};
+
+// services/analytics.js
+import Analytics from '@react-native-firebase/analytics';
+
+export const AnalyticsService = {
+  trackScreenView: async (screenName) => {
+    try {
+      await Analytics().logScreenView({
+        screen_name: screenName,
+        screen_class: screenName,
+      });
+    } catch (error) {
+      console.error('Analytics error:', error);
+    }
+  },
+
+  trackSurveyProgress: async (data) => {
+    try {
+      await Analytics().logEvent('survey_progress', {
+        section_id: data.sectionId,
+        section_index: data.sectionIndex,
+        completion_percentage: data.progress,
+        time_spent: data.timeSpent,
+      });
+    } catch (error) {
+      console.error('Analytics error:', error);
+    }
+  },
+
+  trackQuestionResponse: async (data) => {
+    try {
+      await Analytics().logEvent('question_answered', {
+        question_id: data.questionId,
+        question_type: data.questionType,
+        response_time: data.responseTime,
+        section_id: data.sectionId,
+      });
+    } catch (error) {
+      console.error('Analytics error:', error);
+    }
+  },
+
+  trackSurveyCompletion: async (data) => {
+    try {
+      await Analytics().logEvent('survey_completed', {
+        total_time: data.totalTime,
+        sections_completed: data.sectionsCompleted,
+        response_count: data.responseCount,
+      });
+    } catch (error) {
+      console.error('Analytics error:', error);
+    }
+  },
+};
+
+// services/errorTracking.js
+import * as Sentry from '@sentry/react-native';
+
+export const ErrorTracking = {
+  initialize: () => {
+    Sentry.init({
+      dsn: process.env.SENTRY_DSN,
+      environment: process.env.NODE_ENV,
+      tracesSampleRate: 1.0,
+    });
+  },
+
+  logError: (error, context = {}) => {
+    Sentry.captureException(error, {
+      extra: context,
+    });
+  },
+
+  setUserContext: (userId) => {
+    Sentry.setUser({ id: userId });
+  },
+
+  addBreadcrumb: (data) => {
+    Sentry.addBreadcrumb({
+      category: 'survey',
+      ...data,
+    });
+  },
+};
+
+// hooks/useAnalytics.js
+import { useEffect, useRef } from 'react';
+import { AnalyticsService } from '../services/analytics';
+
+export const useAnalytics = (sectionId, sectionIndex) => {
+  const startTime = useRef(Date.now());
+
+  useEffect(() => {
+    AnalyticsService.trackScreenView(`Survey_Section_${sectionId}`);
+    startTime.current = Date.now();
+
+    return () => {
+      const timeSpent = (Date.now() - startTime.current) / 1000; // Convert to seconds
+      AnalyticsService.trackSurveyProgress({
+        sectionId,
+        sectionIndex,
+        timeSpent,
+        progress: ((sectionIndex + 1) / totalSections) * 100,
+      });
+    };
+  }, [sectionId, sectionIndex]);
+
+  const trackResponse = (questionId, questionType) => {
+    AnalyticsService.trackQuestionResponse({
+      questionId,
+      questionType,
+      responseTime: Date.now() - startTime.current,
+      sectionId,
+    });
+  };
+
+  return { trackResponse };
+};
+
+// components/Survey/AnalyticsWrapper.js
+import React, { useEffect } from 'react';
+import { useAnalytics } from '../../hooks/useAnalytics';
+
+function AnalyticsWrapper({ children, sectionId, sectionIndex }) {
+  const { trackResponse } = useAnalytics(sectionId, sectionIndex);
+
+  return React.Children.map(children, child =>
+    React.cloneElement(child, { onResponse: trackResponse })
+  );
+}
+
+// components/Survey/ErrorBoundary.js
+import React from 'react';
+import { ErrorTracking } from '../../services/errorTracking';
+import ErrorState from './ErrorState';
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    ErrorTracking.logError(error, {
+      component: 'Survey',
+      errorInfo,
+    });
+  }
+
+  handleRetry = () => {
+    this.setState({ hasError: false, error: null });
+  };
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <ErrorState
+          message="Something went wrong with the survey. Please try again."
+          onRetry={this.handleRetry}
+        />
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+// services/performance.js
+import { PerformanceObserver, performance } from 'perf_hooks';
+
+export const PerformanceTracking = {
+  initialize: () => {
+    const obs = new PerformanceObserver((list) => {
+      const entries = list.getEntries();
+      entries.forEach((entry) => {
+        AnalyticsService.trackPerformance({
+          name: entry.name,
+          duration: entry.duration,
+          startTime: entry.startTime,
+        });
+      });
+    });
+    
+    obs.observe({ entryTypes: ['measure'] });
+  },
+
+  startMeasurement: (name) => {
+    performance.mark(`${name}-start`);
+  },
+
+  endMeasurement: (name) => {
+    performance.mark(`${name}-end`);
+    performance.measure(name, `${name}-start`, `${name}-end`);
+  },
+};
+
+// services/storage.js
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export const StorageService = {
+  // Survey Response Storage
+  saveSurveyProgress: async (userId, data) => {
+    try {
+      const key = `survey_progress_${userId}`;
+      await AsyncStorage.setItem(key, JSON.stringify({
+        data,
+        timestamp: Date.now(),
+      }));
+    } catch (error) {
+      console.error('Error saving survey progress:', error);
+      throw error;
+    }
+  },
+
+  getSurveyProgress: async (userId) => {
+    try {
+      const key = `survey_progress_${userId}`;
+      const data = await AsyncStorage.getItem(key);
+      return data ? JSON.parse(data) : null;
+    } catch (error) {
+      console.error('Error getting survey progress:', error);
+      return null;
+    }
+  },
+
+  // Offline Queue Management
+  addToOfflineQueue: async (action) => {
+    try {
+      const queue = await StorageService.getOfflineQueue();
+      queue.push({
+        ...action,
+        timestamp: Date.now(),
+        id: Math.random().toString(36).substr(2, 9),
+      });
+      await AsyncStorage.setItem('offline_queue', JSON.stringify(queue));
+    } catch (error) {
+      console.error('Error adding to offline queue:', error);
+    }
+  },
+
+  getOfflineQueue: async () => {
+    try {
+      const queue = await AsyncStorage.getItem('offline_queue');
+      return queue ? JSON.parse(queue) : [];
+    } catch (error) {
+      console.error('Error getting offline queue:', error);
+      return [];
+    }
+  },
+
+  clearOfflineQueue: async () => {
+    try {
+      await AsyncStorage.removeItem('offline_queue');
+    } catch (error) {
+      console.error('Error clearing offline queue:', error);
+    }
+  },
+};
+
+// services/offlineSync.js
+import NetInfo from '@react-native-community/netinfo';
+import { StorageService } from './storage';
+import { SurveyAPI } from './api';
+
+export const OfflineSync = {
+  initialize: () => {
+    NetInfo.addEventListener(state => {
+      if (state.isConnected) {
+        OfflineSync.processPendingActions();
+      }
+    });
+  },
+
+  processPendingActions: async () => {
+    try {
+      const queue = await StorageService.getOfflineQueue();
+      
+      for (const action of queue) {
+        try {
+          await OfflineSync.processAction(action);
+        } catch (error) {
+          console.error('Error processing action:', action, error);
+        }
+      }
+
+      await StorageService.clearOfflineQueue();
+    } catch (error) {
+      console.error('Error processing offline queue:', error);
+    }
+  },
+
+  processAction: async (action) => {
+    switch (action.type) {
+      case 'SUBMIT_SURVEY':
+        await SurveyAPI.submitSurvey(action.data);
+        break;
+      case 'UPDATE_RESPONSE':
+        await SurveyAPI.updateResponse(action.data);
+        break;
+      // Add other cases as needed
+    }
+  },
+};
+
+// hooks/useOfflineSupport.js
+import { useEffect, useCallback } from 'react';
+import NetInfo from '@react-native-community/netinfo';
+import { StorageService } from '../services/storage';
+
+export const useOfflineSupport = (userId) => {
+  const [isOnline, setIsOnline] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setIsOnline(state.isConnected);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const saveProgress = useCallback(async (data) => {
+    if (!isOnline) {
+      await StorageService.addToOfflineQueue({
+        type: 'SAVE_PROGRESS',
+        data,
+        userId,
+      });
+    } else {
+      await SurveyAPI.saveProgress(userId, data);
+    }
+  }, [isOnline, userId]);
+
+  const submitSurvey = useCallback(async (data) => {
+    if (!isOnline) {
+      await StorageService.addToOfflineQueue({
+        type: 'SUBMIT_SURVEY',
+        data,
+        userId,
+      });
+      return { status: 'queued' };
+    }
+
+    return await SurveyAPI.submitSurvey(data);
+  }, [isOnline, userId]);
+
+  return {
+    isOnline,
+    saveProgress,
+    submitSurvey,
+  };
+};
+
+// components/Survey/OfflineIndicator.js
+import React from 'react';
+import { View, Text, StyleSheet, Animated } from 'react-native';
+import { Theme } from '../../config/theme';
+
+function OfflineIndicator({ isOnline }) {
+  const translateY = useRef(new Animated.Value(-50)).current;
+
+  useEffect(() => {
+    Animated.spring(translateY, {
+      toValue: isOnline ? -50 : 0,
+      useNativeDriver: true,
+      bounciness: 8,
+    }).start();
+  }, [isOnline]);
+
+  return (
+    <Animated.View
+      style={[
+        styles.container,
+        {
+          transform: [{ translateY }],
+        },
+      ]}
+    >
+      <Text style={styles.text}>
+        You're offline. Your responses will be saved and submitted when you're back online.
+      </Text>
+    </Animated.View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: Theme.colors.warning,
+    padding: Theme.spacing.sm,
+    zIndex: 1000,
+  },
+  text: {
+    color: Theme.colors.white,
+    textAlign: 'center',
+    fontSize: 14,
+    fontFamily: Theme.fonts.medium,
+  },
+});
+
+// Updated SurveyContainer with offline support
+import { useOfflineSupport } from '../../hooks/useOfflineSupport';
+
+function SurveyContainer({ userId }) {
+  const { isOnline, saveProgress, submitSurvey } = useOfflineSupport(userId);
+  
+  // ... existing code ...
+
+  useEffect(() => {
+    const saveInterval = setInterval(() => {
+      saveProgress(state.responses);
+    }, 30000); // Auto-save every 30 seconds
+
+    return () => clearInterval(saveInterval);
+  }, [state.responses]);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <OfflineIndicator isOnline={isOnline} />
+      {/* ... rest of the component ... */}
+    </SafeAreaView>
+  );
+}

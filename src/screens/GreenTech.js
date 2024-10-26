@@ -1,9 +1,9 @@
 import React from "react";
 import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
-import { Color, FontFamily, FontSize, Border } from "GlobalStyles";
+import { FontSize, FontFamily, Color } from "GlobalStyles";
 
-const backgroundImage = require('assets/green-tech-background.jpg');
+const backgroundImage = require('assets/green-tech-background.jpg'); // Placeholder image
 
 const GreenTech = () => {
   const navigation = useNavigation();
@@ -11,23 +11,21 @@ const GreenTech = () => {
   return (
     <View style={styles.container}>
       <ImageBackground source={backgroundImage} style={styles.backgroundImage} resizeMode="cover">
+        {/* Light Overlay */}
         <View style={styles.overlay} />
+
         <View style={styles.content}>
           <Text style={styles.title}>GreenTech</Text>
           <Text style={styles.description}>
-            Discover cutting-edge green technology that drives the renewable energy movement.
+            Leading innovations in renewable energy, aiming for a sustainable future with cutting-edge technology.
           </Text>
 
           {/* Navigation Buttons */}
           <View style={styles.navigation}>
-            <TouchableOpacity 
-              style={[styles.navButton, styles.navButtonLeft]} 
-              onPress={() => navigation.goBack()}>
+            <TouchableOpacity style={styles.navButtonLeft} onPress={() => navigation.goBack('EcoFashion')}>
               <Text style={styles.navButtonText}>← Back</Text>
             </TouchableOpacity>
-            <TouchableOpacity 
-              style={[styles.navButton, styles.navButtonRight]} 
-              onPress={() => navigation.navigate('FairTrade')}>
+            <TouchableOpacity style={styles.navButtonRight} onPress={() => navigation.navigate('FairTrade')}>
               <Text style={styles.navButtonText}>Next →</Text>
             </TouchableOpacity>
           </View>
@@ -38,50 +36,50 @@ const GreenTech = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  backgroundImage: { flex: 1 },
+  container: {
+    flex: 1,
+  },
+  backgroundImage: {
+    flex: 1,
+  },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 50, 60, 0.3)', // Adjustable opacity
+    backgroundColor: 'rgba(0, 40, 50, 0.3)', // 30% opacity
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
   },
   title: {
-    fontSize: FontSize.size_21xl,
+    fontSize: 40,
     fontFamily: FontFamily.ralewayExtraBold,
     color: Color.white,
-    marginBottom: 10,
+    marginBottom: 20,
+    textAlign: 'center',
   },
   description: {
-    fontSize: FontSize.paragraphRegular_size,
-    fontFamily: FontFamily.poppinsMedium,
+    fontSize: 16,
+    fontFamily: FontFamily.ralewayMedium,
     color: Color.white,
     textAlign: 'center',
+    marginBottom: 30,
   },
   navigation: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     marginTop: 30,
   },
-  navButton: {
-    width: 120,
-    paddingVertical: 10,
-    borderRadius: Border.br_xl,
-    backgroundColor: Color.blue,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 10,
+  navButtonLeft: {
+    marginRight: 20,
   },
-  navButtonLeft: {},
-  navButtonRight: {},
+  navButtonRight: {
+    marginLeft: 20,
+  },
   navButtonText: {
+    fontSize: 16,
     color: Color.white,
     fontFamily: FontFamily.ralewayBold,
-    fontSize: FontSize.size_xl,
   },
 });
 

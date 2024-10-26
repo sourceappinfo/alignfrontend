@@ -1,9 +1,9 @@
 import React from "react";
 import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
-import { Color, FontFamily, FontSize, Border } from "GlobalStyles";
+import { FontSize, FontFamily, Color } from "GlobalStyles";
 
-const backgroundImage = require('assets/fair-trade-background.jpg');
+const backgroundImage = require('assets/fair-trade-background.jpg'); // Placeholder image
 
 const FairTrade = () => {
   const navigation = useNavigation();
@@ -11,26 +11,30 @@ const FairTrade = () => {
   return (
     <View style={styles.container}>
       <ImageBackground source={backgroundImage} style={styles.backgroundImage} resizeMode="cover">
+        {/* Light Overlay */}
         <View style={styles.overlay} />
+
+        {/* Content */}
         <View style={styles.content}>
-          <Text style={styles.title}>Fair Trade</Text>
+          {/* Title centered at the top */}
+          <Text style={styles.title}>Fair Trade Goods</Text>
+          
+          {/* Description */}
           <Text style={styles.description}>
-            Support ethical trading practices that ensure fair wages and treatment for workers worldwide.
+            Products ethically sourced and fairly traded to support communities around the world.
           </Text>
 
           {/* Navigation Buttons */}
-          <View style={styles.navigation}>
-            <TouchableOpacity 
-              style={[styles.navButton, styles.navButtonLeft]} 
-              onPress={() => navigation.goBack()}>
-              <Text style={styles.navButtonText}>← Back</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={[styles.navButton, styles.navButtonRight]} 
-              onPress={() => navigation.navigate('HumanRights')}>
-              <Text style={styles.navButtonText}>Next →</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity 
+            style={[styles.navButton, styles.navButtonLeft]} 
+            onPress={() => navigation.goBack('Recomendations')}>
+            <Text style={styles.navButtonText}>←</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.navButton, styles.navButtonRight]} 
+            onPress={() => navigation.navigate('HumanRights')}>
+            <Text style={styles.navButtonText}>→</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </View>
@@ -38,50 +42,62 @@ const FairTrade = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  backgroundImage: { flex: 1 },
+  container: { 
+    flex: 1 
+  },
+  backgroundImage: { 
+    flex: 1 
+  },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 40, 60, 0.3)', // Adjustable opacity
+    backgroundColor: 'rgba(0, 40, 50, 0.3)', // 30% opacity for background
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
   },
   title: {
-    fontSize: FontSize.size_21xl,
+    fontSize: 40,
     fontFamily: FontFamily.ralewayExtraBold,
     color: Color.white,
-    marginBottom: 10,
+    textAlign: 'center',
+    marginTop: 50, // Adjust the margin to push the title toward the top
+    marginBottom: 20,
   },
   description: {
-    fontSize: FontSize.paragraphRegular_size,
-    fontFamily: FontFamily.poppinsMedium,
+    fontSize: 16,
+    fontFamily: FontFamily.ralewayMedium,
     color: Color.white,
     textAlign: 'center',
-  },
-  navigation: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 30,
+    marginBottom: 30,
   },
   navButton: {
-    width: 120,
-    paddingVertical: 10,
-    borderRadius: Border.br_xl,
-    backgroundColor: Color.blue,
+    position: 'absolute',
+    bottom: 40,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  navButtonLeft: {},
-  navButtonRight: {},
+  navButtonLeft: {
+    left: 30,
+  },
+  navButtonRight: {
+    right: 30,
+  },
   navButtonText: {
     color: Color.white,
-    fontFamily: FontFamily.ralewayBold,
-    fontSize: FontSize.size_xl,
+    fontSize: 20,
+    fontFamily: FontFamily.ralewayExtraBold,
   },
 });
 

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { 
   Text, 
   StyleSheet, 
@@ -11,12 +11,12 @@ import {
 } from "react-native";
 import { FontFamily, Color, Border, Padding } from "GlobalStyles";
 import { useNavigation } from '@react-navigation/native';
+import { FontAwesome5 } from '@expo/vector-icons'; // For the scan icon
 
 const backgroundImage = require('assets/givingsearch.jpg');
 
 const Search = () => {
   const navigation = useNavigation();
-  const scrollViewRef = useRef(null);
 
   return (
     <View style={styles.container}>
@@ -26,7 +26,7 @@ const Search = () => {
         {/* Overlay */}
         <View style={styles.overlay} />
 
-        <ScrollView ref={scrollViewRef} contentContainerStyle={styles.scrollViewContent}>
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
           
           {/* Title container */}
           <View style={styles.titleContainer}>
@@ -40,6 +40,14 @@ const Search = () => {
               placeholder="Search..." 
               placeholderTextColor="rgba(0, 0, 0, 0.5)"
             />
+
+            {/* Scan Icon */}
+            <TouchableOpacity 
+              style={styles.scanIconContainer} 
+              onPress={() => navigation.navigate('ScanItem')}
+            >
+              <FontAwesome5 name="camera" size={20} color={Color.gray} />
+            </TouchableOpacity>
           </View>
 
         </ScrollView>
@@ -97,6 +105,8 @@ const styles = StyleSheet.create({
     marginTop: 390, // Separating search bar from title
     alignItems: 'center',
     width: '100%',
+    flexDirection: 'row',  // Allows the icon to appear next to the search bar
+    justifyContent: 'center'
   },
   searchButton: {
     shadowOffset: {
@@ -108,12 +118,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     borderRadius: Border.br_sm,
     backgroundColor: Color.white,
-    width: 368,
+    width: 320,
     height: 62,
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: Padding.p_sm,
-    paddingRight: 43,
+    paddingRight: 10,
+  },
+  scanIconContainer: {
+    position: 'absolute',
+    right: 20,  // Adjust to position the icon within the search bar area
+    top: 10,
   },
   // Navigation button styles
   navButton: {
