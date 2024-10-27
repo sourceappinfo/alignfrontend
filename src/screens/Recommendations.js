@@ -1,27 +1,32 @@
-import React, { useState } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, FlatList, Image, ImageBackground } from "react-native";
+// src/screens/Recommendations.js
+import React, { useContext, useState, useEffect } from "react";
+import { Text, StyleSheet, View, TouchableOpacity, FlatList, Image, ImageBackground, ActivityIndicator } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
-import { Color, FontFamily } from "GlobalStyles";
+import { SurveyContext } from "../../context/SurveyContext";
+import { useRecommendations } from "../hooks/useRecommendations";
+import { Color, FontFamily } from "../GlobalStyles";
 
-// Sample recommendations with categories
-const recommendationsData = [
-  { id: '1', company: 'EcoFashion', category: 'Sustainability', description: 'Sustainable and eco-friendly clothing.', image: require('assets/eco-fashion.jpg'), screen: 'EcoFashion' },
-  { id: '2', company: 'GreenTech', category: 'Innovation', description: 'Innovative renewable energy solutions.', image: require('assets/green-tech.jpg'), screen: 'GreenTech' },
-  { id: '3', company: 'FairTrade Goods', category: 'Fair Trade', description: 'Ethically sourced and fair trade products.', image: require('assets/fair-trade.jpg'), screen: 'FairTrade' },
-  { id: '4', company: 'HumanRights Corp', category: 'Human Rights', description: 'Committed to upholding human rights in every product.', image: require('assets/human-rights.jpg'), screen: 'HumanRights' },
-  { id: '5', company: 'EthicalGadgets', category: 'Ethical Practices', description: 'Tech products built with transparency and ethical labor.', image: require('assets/ethical-tech.jpg'), screen: 'EthicalGadgets' },
-];
-
+// Categories for filtering
 const categories = ['All', 'Sustainability', 'Innovation', 'Fair Trade', 'Human Rights', 'Ethical Practices'];
 
 const Recommendations = () => {
   const navigation = useNavigation();
+  const { responses } = useContext(SurveyContext);
+  const { recommendations, loading, error, fetchRecommendations } = useRecommendations();
   const [selectedCategory, setSelectedCategory] = useState('All');
 
+  // Fetch recommendations based on survey responses
+  useEffect(() => {
+    if (responses) {
+      fetchRecommendations(responses);
+    }
+  }, [responses]);
+
+  // Filtered recommendations by category
   const filteredRecommendations = selectedCategory === 'All'
-    ? recommendationsData
-    : recommendationsData.filter(item => item.category === selectedCategory);
+    ? recommendations
+    : recommendations.filter(item => item.category === selectedCategory);
 
   const renderRecommendation = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate(item.screen)}>
@@ -31,7 +36,6 @@ const Recommendations = () => {
           <Text style={styles.cardTitle}>{item.company}</Text>
           <Text style={styles.cardCategory}>{item.category}</Text>
           <Text style={styles.cardDescription}>{item.description}</Text>
-          {/* Add Like/Star button */}
           <TouchableOpacity style={styles.likeButton}>
             <Text style={styles.likeButtonText}>⭐</Text>
           </TouchableOpacity>
@@ -40,9 +44,17 @@ const Recommendations = () => {
     </TouchableOpacity>
   );
 
+  if (loading) {
+    return <ActivityIndicator size="large" color={Color.primary} />;
+  }
+
+  if (error) {
+    return <Text style={styles.errorText}>Error loading recommendations.</Text>;
+  }
+
   return (
     <ImageBackground
-      source={require('assets/recommendations-background.jpg')}
+      source={require('../assets/recommendations-background.jpg')}
       style={styles.backgroundImage}
       resizeMode="cover"
     >
@@ -99,11 +111,11 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)', // Overlay with adjustable opacity
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   container: {
     flex: 1,
-    backgroundColor: 'transparent', // Keeping the background transparent for overlay
+    backgroundColor: 'transparent',
     paddingHorizontal: 20,
   },
   header: {
@@ -218,6 +230,12 @@ const styles = StyleSheet.create({
     color: Color.primary,
     fontSize: 24,
     fontFamily: FontFamily.ralewayBold,
+  },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+    fontFamily: FontFamily.poppinsMedium,
+    padding: 20,
   },
 });
 

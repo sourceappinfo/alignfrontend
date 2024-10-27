@@ -5,6 +5,9 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useFonts } from "expo-font";
 import { Provider as PaperProvider } from 'react-native-paper';
 
+// Import contexts
+import { ProductDataProvider } from 'context/ProductDataContext';
+
 // Import screens
 import ProductData from "screens/ProductData";
 import Profile from "screens/Profile";
@@ -34,7 +37,7 @@ import HumanRights from "screens/HumanRights";
 import EthicalGadgets from "screens/EthicalGadgets"; 
 import ScanItem from "screens/ScanItem"; 
 
-import { theme } from './src/Theme';
+import { theme } from 'Theme';
 
 const Stack = createNativeStackNavigator();
 
@@ -72,42 +75,44 @@ const App = () => {
   return (
     <PaperProvider theme={theme}>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <NavigationContainer>
-          {hideSplashScreen ? (
-            <Stack.Navigator
-              screenOptions={{
-                headerShown: false,
-                gestureEnabled: false,
-              }}
-            >
-              <Stack.Screen name="RegisterAccount" component={RegisterAccount} />
-              <Stack.Screen name="Intro" component={Intro} />
-              <Stack.Screen name="How" component={How} />
-              <Stack.Screen name="Environment" component={Environment} />
-              <Stack.Screen name="Labor" component={Labor} />
-              <Stack.Screen name="CorporateGovernance" component={CorporateGovernance} />
-              <Stack.Screen name="SignIn" component={SignIn} />
-              <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-              <Stack.Screen name="ForgotPassword1" component={ForgotPassword1} />
-              <Stack.Screen name="Verification" component={Verification} />
-              <Stack.Screen name="Profile" component={Profile} />
-              <Stack.Screen name="SideMenu" component={SideMenu} />
-              <Stack.Screen name="Survey" component={Survey} />
-              <Stack.Screen name="Search" component={Search} />
-              <Stack.Screen name="ProductData" component={ProductData} />
-              <Stack.Screen name="Favorites" component={Favorites} />
-              <Stack.Screen name="Notifications" component={Notifications} />
-              <Stack.Screen name="Settings" component={Settings} />
-              <Stack.Screen name="Recommendations" component={Recommendations} />
-              <Stack.Screen name="EcoFashion" component={EcoFashion} />
-              <Stack.Screen name="GreenTech" component={GreenTech} />
-              <Stack.Screen name="FairTrade" component={FairTrade} />
-              <Stack.Screen name="HumanRights" component={HumanRights} />
-              <Stack.Screen name="EthicalGadgets" component={EthicalGadgets} />
-              <Stack.Screen name="ScanItem" component={ScanItem} />
-            </Stack.Navigator>
-          ) : null}
-        </NavigationContainer>
+        <ProductDataProvider> {/* Wrap app with ProductData context provider */}
+          <NavigationContainer>
+            {hideSplashScreen ? (
+              <Stack.Navigator
+                screenOptions={{
+                  headerShown: false,
+                  gestureEnabled: false,
+                }}
+              >
+                <Stack.Screen name="RegisterAccount" component={RegisterAccount} />
+                <Stack.Screen name="Intro" component={Intro} />
+                <Stack.Screen name="How" component={How} />
+                <Stack.Screen name="Environment" component={Environment} />
+                <Stack.Screen name="Labor" component={Labor} />
+                <Stack.Screen name="CorporateGovernance" component={CorporateGovernance} />
+                <Stack.Screen name="SignIn" component={SignIn} />
+                <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+                <Stack.Screen name="ForgotPassword1" component={ForgotPassword1} />
+                <Stack.Screen name="Verification" component={Verification} />
+                <Stack.Screen name="Profile" component={Profile} />
+                <Stack.Screen name="SideMenu" component={SideMenu} />
+                <Stack.Screen name="Survey" component={Survey} />
+                <Stack.Screen name="Search" component={Search} />
+                <Stack.Screen name="ProductData" component={ProductData} />
+                <Stack.Screen name="Favorites" component={Favorites} />
+                <Stack.Screen name="Notifications" component={Notifications} />
+                <Stack.Screen name="Settings" component={Settings} />
+                <Stack.Screen name="Recommendations" component={Recommendations} />
+                <Stack.Screen name="EcoFashion" component={EcoFashion} />
+                <Stack.Screen name="GreenTech" component={GreenTech} />
+                <Stack.Screen name="FairTrade" component={FairTrade} />
+                <Stack.Screen name="HumanRights" component={HumanRights} />
+                <Stack.Screen name="EthicalGadgets" component={EthicalGadgets} />
+                <Stack.Screen name="ScanItem" component={ScanItem} />
+              </Stack.Navigator>
+            ) : null}
+          </NavigationContainer>
+        </ProductDataProvider>
       </GestureHandlerRootView>
     </PaperProvider>
   );
