@@ -1,7 +1,7 @@
-import React from "react";
-import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react-native";
+import React from 'react';
+import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Color, FontFamily } from "GlobalStyles";
+import { Color, FontFamily } from 'GlobalStyles';
 
 // Placeholder image
 const backgroundImage = require('assets/notifications_background.jpg');
@@ -35,39 +35,48 @@ const Notifications = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   backgroundImage: {
     flex: 1,
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 40, 50, 0.4)', // 40% opacity for better contrast
+  container: {
+    flex: 1,
   },
   content: {
+    alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    marginTop: 100, // Pushing content down to make room for the title
-  },
-  title: {
-    fontSize: 34,
-    fontFamily: FontFamily.sonder, // Using the same font for consistency
-    color: Color.white,
-    marginBottom: 10,
-    textAlign: 'center',
-    position: 'absolute',
-    top: 50, // Positioning the title towards the top center
+    marginTop: 100,
+    paddingHorizontal: 20, // Pushing content down to make room for the title
   },
   description: {
-    fontSize: 18,
-    fontFamily: FontFamily.ralewayMedium,
     color: Color.white,
-    textAlign: 'center',
+    fontFamily: FontFamily.ralewayMedium,
+    fontSize: 18,
     marginBottom: 30,
     marginTop: 10,
+    textAlign: 'center',
+  },
+  navButton: {
+    backgroundColor: Color.primary,
+    borderRadius: 10,
+    elevation: 5,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  navButtonLeft: {
+    marginRight: 20,
+  },
+  navButtonRight: {
+    marginLeft: 20,
+  },
+  navButtonText: {
+    color: Color.white,
+    fontFamily: FontFamily.ralewayBold,
+    fontSize: 16,
   },
   navigation: {
     flexDirection: 'row',
@@ -77,27 +86,18 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
   },
-  navButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    backgroundColor: Color.primary,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 40, 50, 0.4)', // 40% opacity for better contrast
   },
-  navButtonLeft: {
-    marginRight: 20,
-  },
-  navButtonRight: {
-    marginLeft: 20,
-  },
-  navButtonText: {
-    fontSize: 16,
+  title: {
+    fontSize: 34,
+    fontFamily: FontFamily.sonder, // Using the same font for consistency
     color: Color.white,
-    fontFamily: FontFamily.ralewayBold,
+    marginBottom: 10,
+    textAlign: 'center',
+    position: 'absolute',
+    top: 50, // Positioning the title towards the top center
   },
 });
 

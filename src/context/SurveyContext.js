@@ -1,8 +1,8 @@
 // src/context/SurveyContext.js
 
-import React, { createContext, useState, useContext } from "react";
-import PropTypes from "prop-types";
-import { submitSurveyResponses } from "../services/api"; // API function for submitting responses
+import React, { createContext, useState, useContext } from 'react';
+import PropTypes from 'prop-types';
+import { submitSurveyResponses } from 'services/api'; // Use 'services' alias for API
 
 // Create the SurveyContext
 const SurveyContext = createContext();
@@ -35,13 +35,13 @@ export const SurveyProvider = ({ children }) => {
   const submitResponses = async () => {
     try {
       await submitSurveyResponses(responses);
-      console.log("Survey responses submitted successfully");
+      console.log('Survey responses submitted successfully');
       setResponses({});
       setCurrentQuestionIndex(0);
       setSubmissionError(null); // Clear any errors upon success
     } catch (error) {
-      console.error("Error submitting survey responses:", error);
-      setSubmissionError("Failed to submit responses. Please try again.");
+      console.error('Error submitting survey responses:', error);
+      setSubmissionError('Failed to submit responses. Please try again.');
     }
   };
 

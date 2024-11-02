@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, ScrollView, SafeAreaView, StyleSheet, Text } from 'react-native';
-import { useSurvey } from '../../context/SurveyContext';
+import { useSurvey } from 'context/SurveyContext'; // Adjusted for Babel alias
 import ProgressBar from './Navigation/ProgressBar';
 import NavigationButtons from './Navigation/NavigationButtons';
 import QuestionRenderer from './QuestionRenderer';
-import { SURVEY_SECTIONS } from '../../data/surveyQuestions';
-import { Theme } from '../../config/theme';
+import { SURVEY_SECTIONS } from 'data/surveyQuestions'; // Adjusted for Babel alias
+import { Theme } from 'config/theme'; // Adjusted for Babel alias
 
 function SurveyContainer() {
   const {
@@ -62,26 +62,26 @@ function SurveyContainer() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: Theme.colors.background,
+    flex: 1,
   },
   contentContainer: {
     flex: 1,
     padding: Theme.spacing.md,
   },
+  sectionDescription: {
+    color: Theme.colors.secondary,
+    fontFamily: Theme.fonts.regular,
+    fontSize: 16,
+  },
   sectionHeader: {
     marginBottom: Theme.spacing.lg,
   },
   sectionTitle: {
-    fontSize: 24,
-    fontFamily: Theme.fonts.bold,
     color: Theme.colors.text,
+    fontFamily: Theme.fonts.bold,
+    fontSize: 24,
     marginBottom: Theme.spacing.sm,
-  },
-  sectionDescription: {
-    fontSize: 16,
-    fontFamily: Theme.fonts.regular,
-    color: Theme.colors.secondary,
   },
 });
 

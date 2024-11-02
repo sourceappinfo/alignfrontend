@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 import { 
   Text, 
   StyleSheet, 
@@ -7,23 +7,45 @@ import {
   ScrollView, 
   ImageBackground, 
   StatusBar,
-  TouchableOpacity 
-} from "react-native";
-import { FontFamily, Color, Border, Padding } from "GlobalStyles";
+  TouchableOpacity, 
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
+import { FontFamily, Color, Border, Padding } from 'GlobalStyles';
 import { useNavigation } from '@react-navigation/native';
-import { FontAwesome5 } from '@expo/vector-icons'; // For the scan icon
+import { FontAwesome5 } from '@expo/vector-icons';
+import { search } from '../services/api'; // Adjust path if needed
 
 const backgroundImage = require('assets/givingsearch.jpg');
 
 const Search = () => {
   const navigation = useNavigation();
+  const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState([]);
+
+  const handleSearch = async () => {
+    if (!query.trim()) {
+      Alert.alert('Please enter a search term');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await search.query(query);
+      setResults(response.data); // Assuming response data structure aligns with response.data
+    } catch (error) {
+      Alert.alert('Search Failed', 'An error occurred during the search.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" translucent={true} backgroundColor="transparent" />
       
       <ImageBackground source={backgroundImage} style={styles.background} resizeMode="cover">
-        {/* Overlay */}
         <View style={styles.overlay} />
 
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -39,9 +61,11 @@ const Search = () => {
               style={styles.searchButton} 
               placeholder="Search..." 
               placeholderTextColor="rgba(0, 0, 0, 0.5)"
+              value={query}
+              onChangeText={setQuery}
+              onSubmitEditing={handleSearch}
             />
 
-            {/* Scan Icon */}
             <TouchableOpacity 
               style={styles.scanIconContainer} 
               onPress={() => navigation.navigate('ScanItem')}
@@ -50,12 +74,29 @@ const Search = () => {
             </TouchableOpacity>
           </View>
 
+          {/* Search Results */}
+          {loading ? (
+            <ActivityIndicator size="large" color={Color.white} />
+          ) : (
+            results.length > 0 ? (
+              <View style={styles.resultsContainer}>
+                {results.map((result, index) => (
+                  <Text key={index} style={styles.resultText}>
+                    {result.name} {/* Adjust based on result properties */}
+                  </Text>
+                ))}
+              </View>
+            ) : (
+              <Text style={styles.noResultsText}>No results found.</Text>
+            )
+          )}
+
         </ScrollView>
 
         {/* Navigation Buttons */}
         <TouchableOpacity 
           style={[styles.navButton, styles.navButtonLeft]}
-          onPress={() => navigation.navigate('RegisterAccount')} // Navigate back to RegisterAccount page
+          onPress={() => navigation.navigate('RegisterAccount')}
         >
           <Text style={styles.navButtonText}>←</Text>
         </TouchableOpacity>
@@ -77,69 +118,78 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-    width: '100%',
     height: '100%',
+    width: '100%',
   },
-  // Added overlay style
   overlay: {
-    ...StyleSheet.absoluteFillObject, // This ensures the overlay covers the entire screen
-    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Dark overlay with 40% opacity
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   scrollViewContent: {
     flexGrow: 1,
   },
   titleContainer: {
-    position: 'absolute', // Make the title independent of scrollView positioning
-    top: 290, // Adjust the vertical position of the title as needed
+    position: 'absolute',
+    top: 290,
     width: '100%',
-    alignItems: 'center', // Center horizontally
+    alignItems: 'center',
   },
   searchTitle: {
+    color: Color.white,
+    fontFamily: FontFamily.sonder,
     fontSize: 70,
     lineHeight: 68,
-    fontFamily: FontFamily.sonder,
-    color: Color.white,
-    textAlign: "center",
+    textAlign: 'center',
   },
   searchContainer: {
-    marginTop: 390, // Separating search bar from title
+    marginTop: 390,
     alignItems: 'center',
     width: '100%',
-    flexDirection: 'row',  // Allows the icon to appear next to the search bar
-    justifyContent: 'center'
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   searchButton: {
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowRadius: 4,
-    elevation: 4,
-    shadowOpacity: 1,
-    borderRadius: Border.br_sm,
+    alignItems: 'center',
     backgroundColor: Color.white,
-    width: 320,
+    borderRadius: Border.br_sm,
+    elevation: 4,
+    flexDirection: 'row',
     height: 62,
-    flexDirection: "row",
-    alignItems: "center",
     paddingLeft: Padding.p_sm,
     paddingRight: 10,
+    width: 320,
   },
   scanIconContainer: {
     position: 'absolute',
-    right: 20,  // Adjust to position the icon within the search bar area
+    right: 20,
     top: 10,
   },
-  // Navigation button styles
+  resultsContainer: {
+    paddingTop: 20,
+    paddingHorizontal: 20,
+  },
+  resultText: {
+    color: Color.white,
+    fontSize: 16,
+    marginVertical: 5,
+    fontFamily: FontFamily.ralewaylight,
+  },
+  noResultsText: {
+    color: Color.white,
+    textAlign: 'center',
+    fontSize: 16,
+    marginTop: 20,
+    fontFamily: FontFamily.ralewaylight,
+  },
   navButton: {
-    position: 'absolute',
-    bottom: 40,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
+    bottom: 40,
+    elevation: 5,
+    height: 40,
+    justifyContent: 'center',
+    position: 'absolute',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -147,7 +197,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    width: 40,
   },
   navButtonLeft: {
     left: 30,
@@ -157,8 +207,8 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: Color.white,
-    fontSize: 20,
     fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 20,
   },
 });
 

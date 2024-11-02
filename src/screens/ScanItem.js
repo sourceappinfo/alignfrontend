@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { Camera } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
-import { FontFamily, Color } from "GlobalStyles";
+import { FontFamily, Color } from 'GlobalStyles';
 
 const ScanItem = () => {
   const navigation = useNavigation();
@@ -13,7 +13,7 @@ const ScanItem = () => {
   // Request camera permission when the component mounts
   useEffect(() => {
     (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync(); // Corrected permission method
+      const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
   }, []);
@@ -22,10 +22,38 @@ const ScanItem = () => {
     if (cameraRef) {
       setIsScanning(true);
       const photo = await cameraRef.takePictureAsync(); // Capture photo
-      // Here you would send the photo.uri to your backend for image recognition
-      // Example: await sendImageToBackend(photo.uri);
-      setIsScanning(false);
-      navigation.goBack(); // Navigate back after scan or to results page
+
+      try {
+        // Send the captured image to the backend
+        const formData = new FormData();
+        formData.append('file', {
+          uri: photo.uri,
+          name: 'scan.jpg',
+          type: 'image/jpg',
+        });
+
+        const response = await fetch('http://192.168.1.20:5000/api/scan-item', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Image recognition failed');
+        }
+
+        const data = await response.json();
+        console.log(data);  // Display the brand or company information
+        navigation.navigate('ProductData', { data });  // Navigate to product data page with result
+
+      } catch (error) {
+        Alert.alert('Scan Failed', 'An error occurred while scanning the item.');
+        console.error('Image recognition failed:', error);
+      } finally {
+        setIsScanning(false);
+      }
     }
   };
 
@@ -73,59 +101,59 @@ const ScanItem = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  buttonContainer: {
+    alignItems: 'center',
+    bottom: 50,
+    position: 'absolute',
+    width: '100%',
   },
   camera: {
     flex: 1,
     justifyContent: 'center',
   },
-  overlay: {
+  container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)', // Semi-transparent overlay
   },
-  scanText: {
+  navButtonLeft: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
+    height: 40,
+    justifyContent: 'center',
+    left: 20,
+    position: 'absolute',
+    top: 40,
+    width: 40,
+  },
+  navButtonText: {
     color: Color.white,
     fontFamily: FontFamily.ralewayExtraBold,
-    fontSize: 24,
-    textAlign: 'center',
+    fontSize: 20,
   },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 50,
-    width: '100%',
+  overlay: {
     alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    flex: 1,
+    justifyContent: 'center',
   },
   scanButton: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: 50,
+    height: 100,
+    justifyContent: 'center',
+    width: 100,
   },
   scanButtonText: {
     color: '#000',
     fontFamily: FontFamily.ralewayExtraBold,
     fontSize: 20,
   },
-  navButtonLeft: {
-    position: 'absolute',
-    top: 40,
-    left: 20,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  navButtonText: {
+  scanText: {
     color: Color.white,
-    fontSize: 20,
     fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 24,
+    textAlign: 'center',
   },
 });
 

@@ -1,6 +1,6 @@
-import * as React from "react";
-import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react-native";
-import { Color, FontFamily, FontSize } from "GlobalStyles";
+import * as React from 'react';
+import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from 'react-native';
+import { Color, FontFamily, FontSize } from 'GlobalStyles';
 import { useNavigation } from '@react-navigation/native';
 
 const backgroundImage = require('assets/howgreenpic.jpg');
@@ -72,42 +72,41 @@ const styles = StyleSheet.create({
   },
   how: {
     flex: 1,
-    paddingTop: 100, 
     paddingHorizontal: 30, 
+    paddingTop: 100, 
   },
   howTitle: {
-    fontSize: 90, 
-    fontFamily: FontFamily.sonder, 
     color: Color.white, 
-    textAlign: 'center', 
+    fontFamily: FontFamily.sonder, 
+    fontSize: 90, 
     marginBottom: 40, 
+    textAlign: 'center', 
   },
   scoringSystemContainer: {
     marginBottom: 40, 
   },
   scoringSystemText: {
-    fontSize: 35, 
-    fontFamily: FontFamily.poppinsMedium, 
     color: Color.white, 
+    fontFamily: FontFamily.poppinsMedium, 
+    fontSize: 35, 
   },
   pillarText: {
-    fontSize: 60, 
-    fontFamily: FontFamily.reenieBeanie, 
+    alignItems: 'center', 
     color: Color.white, 
-    marginBottom: 60, 
+    fontFamily: FontFamily.reenieBeanie, 
+    fontSize: 60, 
     lineHeight: 60,
-    alignItems: 'center', // Center the pillar text horizontally
-    marginBottom: 60,
+    marginBottom: 60, // Center the pillar text horizontally
   },
   navButton: {
-    position: 'absolute',
-    bottom: 40,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
+    bottom: 40,
+    elevation: 5,
+    height: 40,
+    justifyContent: 'center',
+    position: 'absolute',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -115,7 +114,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    width: 40,
   },
   navButtonLeft: {
     left: 30,
@@ -125,8 +124,8 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: Color.white,
-    fontSize: 20,
     fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 20,
   },
 });
 

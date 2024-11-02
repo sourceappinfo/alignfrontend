@@ -1,7 +1,7 @@
-import React from "react";
-import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react-native";
+import React from 'react';
+import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { FontSize, FontFamily, Color } from "GlobalStyles";
+import { FontSize, FontFamily, Color } from 'GlobalStyles';
 
 const backgroundImage = require('assets/fair-trade-background.jpg'); // Placeholder image
 
@@ -42,51 +42,39 @@ const FairTrade = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1 
-  },
   backgroundImage: { 
-    flex: 1 
+    flex: 1, 
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 40, 50, 0.3)', // 30% opacity for background
+  container: { 
+    flex: 1, 
   },
   content: {
+    alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
     paddingHorizontal: 30,
   },
-  title: {
-    fontSize: 40,
-    fontFamily: FontFamily.ralewayExtraBold,
-    color: Color.white,
-    textAlign: 'center',
-    marginTop: 50, // Adjust the margin to push the title toward the top
-    marginBottom: 20,
-  },
   description: {
-    fontSize: 16,
-    fontFamily: FontFamily.ralewayMedium,
     color: Color.white,
-    textAlign: 'center',
+    fontFamily: FontFamily.ralewayMedium,
+    fontSize: 16,
     marginBottom: 30,
+    textAlign: 'center',
   },
   navButton: {
-    position: 'absolute',
-    bottom: 40,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
+    bottom: 40,
+    elevation: 5,
+    height: 40,
+    justifyContent: 'center',
+    position: 'absolute',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    width: 40,
   },
   navButtonLeft: {
     left: 30,
@@ -96,8 +84,20 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: Color.white,
-    fontSize: 20,
     fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 20,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 40, 50, 0.3)', // 30% opacity for background
+  },
+  title: {
+    fontSize: 40,
+    fontFamily: FontFamily.ralewayExtraBold,
+    color: Color.white,
+    textAlign: 'center',
+    marginTop: 50, // Adjust the margin to push the title toward the top
+    marginBottom: 20,
   },
 });
 

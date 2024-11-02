@@ -1,7 +1,7 @@
-import React from "react";
-import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react-native";
+import React from 'react';
+import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Color, FontFamily, FontSize, Border } from "GlobalStyles";
+import { Color, FontFamily, FontSize, Border } from 'GlobalStyles';
 
 const backgroundImage = require('assets/eco-fashion-background.jpg');
 
@@ -43,21 +43,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 40, 50, 0.3)', // Adjustable opacity
   },
   content: {
+    alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
     paddingHorizontal: 20,
   },
   title: {
-    fontSize: FontSize.size_21xl,
-    fontFamily: FontFamily.ralewayExtraBold,
     color: Color.white,
+    fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: FontSize.size_21xl,
     marginBottom: 10,
   },
   description: {
-    fontSize: FontSize.paragraphRegular_size,
-    fontFamily: FontFamily.poppinsMedium,
     color: Color.white,
+    fontFamily: FontFamily.poppinsMedium,
+    fontSize: FontSize.paragraphRegular_size,
     textAlign: 'center',
   },
   // Navigation buttons at the bottom
@@ -87,8 +87,8 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: Color.white,
-    fontSize: 20,
     fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 20,
   },
 });
 

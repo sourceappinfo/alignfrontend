@@ -1,11 +1,11 @@
 // src/screens/Recommendations.js
-import React, { useContext, useState, useEffect } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, FlatList, Image, ImageBackground, ActivityIndicator } from "react-native";
+import React, { useContext, useState, useEffect } from 'react';
+import { Text, StyleSheet, View, TouchableOpacity, FlatList, Image, ImageBackground, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
-import { SurveyContext } from "../../context/SurveyContext";
-import { useRecommendations } from "../hooks/useRecommendations";
-import { Color, FontFamily } from "../GlobalStyles";
+import { SurveyContext } from 'context/SurveyContext'; // Adjusted for Babel alias
+import { useRecommendations } from 'hooks/useRecommendations'; // Adjusted for Babel alias
+import { Color, FontFamily } from 'GlobalStyles'; // Adjusted for Babel alias
 
 // Categories for filtering
 const categories = ['All', 'Sustainability', 'Innovation', 'Fair Trade', 'Human Rights', 'Ethical Practices'];
@@ -109,116 +109,103 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    paddingHorizontal: 20,
-  },
-  header: {
-    paddingTop: 60,
-    paddingBottom: 20,
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 36,
-    fontFamily: FontFamily.sonder,
-    color: Color.white,
-    marginBottom: 10,
-  },
-  description: {
-    fontSize: 16,
-    fontFamily: FontFamily.poppinsMedium,
-    color: Color.gray,
-    textAlign: 'center',
-    paddingHorizontal: 30,
-  },
-  filterContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 10,
-  },
-  filterText: {
-    fontSize: 16,
-    fontFamily: FontFamily.poppinsMedium,
-    color: Color.white,
-  },
-  picker: {
-    height: 50,
-    width: 150,
-  },
-  list: {
-    paddingVertical: 20,
-  },
   card: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 10,
+    elevation: 5,
     marginBottom: 20,
+    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    elevation: 5,
-    overflow: 'hidden',
   },
-  cardImage: {
-    width: '100%',
-    height: 120,
+  cardCategory: {
+    color: Color.primary,
+    fontFamily: FontFamily.ralewayMedium,
+    fontSize: 14,
+    marginBottom: 5,
   },
   cardContent: {
     padding: 15,
   },
-  cardTitle: {
-    fontSize: 20,
-    fontFamily: FontFamily.ralewayBold,
-    color: Color.black,
-    marginBottom: 5,
-  },
-  cardCategory: {
-    fontSize: 14,
-    fontFamily: FontFamily.ralewayMedium,
-    color: Color.primary,
-    marginBottom: 5,
-  },
   cardDescription: {
-    fontSize: 14,
-    fontFamily: FontFamily.ralewayMedium,
     color: Color.gray,
+    fontFamily: FontFamily.ralewayMedium,
+    fontSize: 14,
+  },
+  cardImage: {
+    height: 120,
+    width: '100%',
+  },
+  cardTitle: {
+    color: Color.black,
+    fontFamily: FontFamily.ralewayBold,
+    fontSize: 20,
+    marginBottom: 5,
+  },
+  container: {
+    backgroundColor: 'transparent',
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  description: {
+    color: Color.gray,
+    fontFamily: FontFamily.poppinsMedium,
+    fontSize: 16,
+    paddingHorizontal: 30,
+    textAlign: 'center',
+  },
+  errorText: {
+    color: 'red',
+    fontFamily: FontFamily.poppinsMedium,
+    padding: 20,
+    textAlign: 'center',
+  },
+  filterContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+  },
+  filterText: {
+    color: Color.white,
+    fontFamily: FontFamily.poppinsMedium,
+    fontSize: 16,
+  },
+  header: {
+    alignItems: 'center',
+    paddingBottom: 20,
+    paddingTop: 60,
   },
   likeButton: {
     alignSelf: 'flex-end',
-    marginTop: 10,
     backgroundColor: '#f1c40f',
+    borderRadius: 5,
+    marginTop: 10,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 5,
   },
   likeButtonText: {
-    fontSize: 16,
     color: Color.white,
     fontFamily: FontFamily.ralewayBold,
+    fontSize: 16,
   },
-  navigation: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  list: {
     paddingVertical: 20,
   },
   navButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: 20,
+    elevation: 5,
+    height: 40,
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 5,
+    width: 40,
   },
   navButtonLeft: {
     marginRight: 20,
@@ -228,14 +215,27 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: Color.primary,
-    fontSize: 24,
     fontFamily: FontFamily.ralewayBold,
+    fontSize: 24,
   },
-  errorText: {
-    color: 'red',
-    textAlign: 'center',
-    fontFamily: FontFamily.poppinsMedium,
-    padding: 20,
+  navigation: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 20,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+  },
+  picker: {
+    height: 50,
+    width: 150,
+  },
+  title: {
+    color: Color.white,
+    fontFamily: FontFamily.sonder,
+    fontSize: 36,
+    marginBottom: 10,
   },
 });
 

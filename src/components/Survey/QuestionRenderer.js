@@ -1,10 +1,10 @@
 // src/components/Survey/QuestionRenderer.js
 import React from 'react';
 import PropTypes from 'prop-types';
-import ScaleQuestion from './QuestionTypes/ScaleQuestion';
-import MultiSelectQuestion from './QuestionTypes/MultiSelectQuestion';
-import SingleSelectQuestion from './QuestionTypes/SingleSelectQuestion';
-import OpenEndedQuestion from './QuestionTypes/OpenEndedQuestion';
+import ScaleQuestion from 'components/Survey/QuestionTypes/ScaleQuestion'; // Adjusted if components alias is used
+import MultiSelectQuestion from 'components/Survey/QuestionTypes/MultiSelectQuestion';
+import SingleSelectQuestion from 'components/Survey/QuestionTypes/SingleSelectQuestion';
+import OpenEndedQuestion from 'components/Survey/QuestionTypes/OpenEndedQuestion';
 
 const QuestionRenderer = ({ question, value, onChange }) => {
   switch (question.type) {

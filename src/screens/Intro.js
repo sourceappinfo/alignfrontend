@@ -1,6 +1,6 @@
-import * as React from "react";
-import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react-native";
-import { Color, FontSize, FontFamily } from "GlobalStyles";
+import * as React from 'react';
+import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from 'react-native';
+import { Color, FontSize, FontFamily } from 'GlobalStyles';
 import { useNavigation } from '@react-navigation/native';
 
 const backgroundImage = require('assets/intropic4.jpg');
@@ -57,68 +57,60 @@ const Intro = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  align: {
+    color: Color.white,
+    fontFamily: FontFamily.sonder,
+    fontSize: 105,
+    textAlign: 'center',
   },
   backgroundImage: {
     flex: 1,
+  },
+  container: {
+    flex: 1,
+  },
+  empowersConsumersWith: {
+    color: Color.white,
+    fontFamily: FontFamily.poppinsMedium,
+    fontSize: 31,
+    lineHeight: 70,
+    marginBottom: -50,
+    textAlign: 'center',  // Added margin to create space below the text
+  },
+  frame1: {
+    marginBottom: 300, // Increased margin for more space below
+  },
+  frame2: {
+    marginBottom: 80, // Increased margin for more space between the sections
+  },
+  frameAlign: {
+    alignItems: 'center',
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 120,
+  },
+  frameTextContainer: {
+    alignItems: 'center',
+    left: 0,
+    paddingHorizontal: 20,
+    position: 'absolute',
+    right: 0,
+    top: '25%',
   },
   intro: {
     flex: 1,
     position: 'relative',
   },
-  frameAlign: {
-    position: 'absolute',
-    top: 120,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-  },
-  align: {
-    fontSize: 105,
-    fontFamily: FontFamily.sonder,
-    color: Color.white,
-    textAlign: 'center',
-  },
-  frameTextContainer: {
-    position: 'absolute',
-    top: '25%',
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  frame2: {
-    marginBottom: 80, // Increased margin for more space between the sections
-  },
-  empowersConsumersWith: {
-    fontSize: 31,
-    fontFamily: FontFamily.poppinsMedium,
-    color: Color.white,
-    textAlign: 'center',
-    lineHeight: 70,
-    marginBottom: -50,  // Added margin to create space below the text
-  },
-  frame1: {
-    marginBottom: 300, // Increased margin for more space below
-  },
-  sustainableEthicalText: {
-    fontSize: 70,
-    fontFamily: FontFamily.reenieBeanie,
-    color: Color.white,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    marginBottom: 70, // Added margin for space between this text and the next element
-  },
   navButton: {
-    position: 'absolute',
-    bottom: 40,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
+    bottom: 40,
+    elevation: 5,
+    height: 40,
+    justifyContent: 'center',
+    position: 'absolute',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -126,7 +118,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    width: 40,
   },
   navButtonLeft: {
     left: 30,
@@ -136,8 +128,16 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: Color.white,
-    fontSize: 20,
     fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 20,
+  },
+  sustainableEthicalText: {
+    color: Color.white,
+    fontFamily: FontFamily.reenieBeanie,
+    fontSize: 70,
+    fontWeight: 'bold',
+    marginBottom: 70,
+    textAlign: 'center', // Added margin for space between this text and the next element
   },
 });
 

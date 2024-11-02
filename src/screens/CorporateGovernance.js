@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react-native";
+import * as React from 'react';
+import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from 'react-native';
 import { FontSize, FontFamily, Color, Border } from 'GlobalStyles';  // No 'src/' because of the alias setup
 
 const CorporateGovernance = ({ navigation }) => {
@@ -13,7 +13,7 @@ const CorporateGovernance = ({ navigation }) => {
 
       <View style={styles.corporateGovernance}>
         <Text style={[styles.thisLooksAt, styles.csrTransform]}>
-          {`This looks at a company's corporate social responsibility (CSR), transparency, accountability, and leadership practices. We examine political lobbying activities, shareholder values, and commitment to corporate social responsibility.`}
+          {'This looks at a company\'s corporate social responsibility (CSR), transparency, accountability, and leadership practices. We examine political lobbying activities, shareholder values, and commitment to corporate social responsibility.'}
         </Text>
 
         <Text style={[styles.csr, styles.csrTransform]}>CSR</Text>
@@ -51,62 +51,62 @@ const styles = StyleSheet.create({
   //   backgroundColor: 'rgba(0, 0, 0, 0)',  // Adjustable opacity overlay
   // },
   csrTransform: {
+    position: 'absolute',
     transform: [
-      { rotate: "-0.1deg" },
+      { rotate: '-0.1deg' },
     ],
-    position: "absolute",
   },
   thisLooksAt: {
-    top: 147,
-    left: 16,
+    color: Color.white,
+    fontFamily: FontFamily.poppinsMedium,
     fontSize: 31,
-    lineHeight: 55,
-    fontWeight: "500",
-    fontFamily: FontFamily.poppinsMedium, 
-    width: 339,
+    fontWeight: '500',
+    left: 16,
+    lineHeight: 55, 
     marginTop: 20,
-    textShadowColor: "rgba(0, 0, 0, 0.25)",
+    position: 'absolute',
+    textAlign: 'left',
+    textShadowColor: 'rgba(0, 0, 0, 0.25)',
     textShadowOffset: { width: 0, height: 4 },
     textShadowRadius: 4,
-    textAlign: "left",
-    color: Color.white,
-    position: "absolute",
+    top: 147,
+    width: 339,
   },
   csr: {
-    top: 65,
-    left: 18,
-    fontSize: FontSize.size_77xl,
-    lineHeight: 93,
-    fontFamily: FontFamily.sonder,
-    width: 380,
-    textAlign: "left",
     color: Color.white,
-    position: "absolute",
+    fontFamily: FontFamily.sonder,
+    fontSize: FontSize.size_77xl,
+    left: 18,
+    lineHeight: 93,
+    position: 'absolute',
+    textAlign: 'left',
+    top: 65,
+    width: 380,
   },
   corporateGovernance: {
     flex: 1,
     borderRadius: Border.br_11xl,
     backgroundColor: 'transparent',  // Ensure transparency
     borderWidth: 1,
-    width: "100%",
+    width: '100%',
     height: 956,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   // Navigation Button styles
   navButton: {
-    position: 'absolute',
-    bottom: 40,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
+    bottom: 40,
+    elevation: 5,
+    height: 40,
+    justifyContent: 'center',
+    position: 'absolute',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    width: 40,
   },
   navButtonLeft: {
     left: 30,  // Positioning for the back button on the left
@@ -116,8 +116,8 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: Color.white,
-    fontSize: 20,
     fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 20,
   },
 });
 

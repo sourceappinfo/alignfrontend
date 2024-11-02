@@ -1,6 +1,6 @@
 // src/context/ProductDataContext.js
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { fetchCompanyData } from '../services/api'; // Adjust based on your API file location
+import { fetchCompanyData } from 'services/api';
 
 // Create a context
 const ProductDataContext = createContext();

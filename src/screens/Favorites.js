@@ -1,7 +1,7 @@
-import React from "react";
-import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react-native";
+import React from 'react';
+import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Color, FontFamily } from "GlobalStyles";
+import { Color, FontFamily } from 'GlobalStyles';
 
 // Placeholder image
 const backgroundImage = require('assets/favorites_background.jpg');
@@ -38,47 +38,33 @@ const Favorites = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   backgroundImage: {
     flex: 1,
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 40, 50, 0.3)', // 30% opacity
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 30,
-    fontFamily: FontFamily.ralewayBold,
-    marginBottom: 10,
-    color: Color.white,
-  },
-  description: {
-    fontSize: 16,
-    fontFamily: FontFamily.ralewayMedium,
-    marginBottom: 20,
-    textAlign: 'center',
-    color: Color.white,
-    paddingHorizontal: 20,
-  },
   button: {
     backgroundColor: Color.primary,
-    padding: 15,
     borderRadius: 10,
+    padding: 15,
   },
   buttonText: {
     color: Color.white,
     fontFamily: FontFamily.ralewayBold,
   },
-  navigation: {
-    flexDirection: 'row',
-    marginTop: 30,
+  container: {
+    flex: 1,
+  },
+  content: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  description: {
+    color: Color.white,
+    fontFamily: FontFamily.ralewayMedium,
+    fontSize: 16,
+    marginBottom: 20,
+    paddingHorizontal: 20,
+    textAlign: 'center',
   },
   navButtonLeft: {
     marginRight: 20,
@@ -87,9 +73,23 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   navButtonText: {
-    fontSize: 16,
     color: Color.primary,
     fontFamily: FontFamily.ralewayBold,
+    fontSize: 16,
+  },
+  navigation: {
+    flexDirection: 'row',
+    marginTop: 30,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 40, 50, 0.3)', // 30% opacity
+  },
+  title: {
+    color: Color.white,
+    fontFamily: FontFamily.ralewayBold,
+    fontSize: 30,
+    marginBottom: 10,
   },
 });
 

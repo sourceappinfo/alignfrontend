@@ -1,3 +1,4 @@
+// babel.config.js
 module.exports = function (api) {
   api.cache(true);
 
@@ -19,10 +20,12 @@ module.exports = function (api) {
             assets: './src/assets',
             components: './src/components',
             screens: './src/screens',
-            hooks: './src/hooks', // added hooks alias
-            services: './src/services', // added services alias
-            utils: './src/utils', // added utils alias
+            hooks: './src/hooks',         // Alias for hooks
+            services: './src/services',   // Alias for services
+            utils: './src/utils',         // Alias for utils
             GlobalStyles: './src/GlobalStyles',
+            context: './src/context',     // Added alias for context
+            Theme: './src/Theme',
           },
         },
       ],

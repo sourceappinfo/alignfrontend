@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { 
   Text, 
   StyleSheet, 
@@ -7,9 +7,9 @@ import {
   ScrollView, 
   ImageBackground, 
   StatusBar,
-  TouchableOpacity 
-} from "react-native";
-import { FontFamily, Color, Border, Padding } from "GlobalStyles";
+  TouchableOpacity, 
+} from 'react-native';
+import { FontFamily, Color, Border, Padding } from 'GlobalStyles';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons'; // For the scan icon
 
@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-    width: '100%',
     height: '100%',
+    width: '100%',
   },
   // Added overlay style
   overlay: {
@@ -95,35 +95,35 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Center horizontally
   },
   searchTitle: {
+    color: Color.white,
+    fontFamily: FontFamily.sonder,
     fontSize: 70,
     lineHeight: 68,
-    fontFamily: FontFamily.sonder,
-    color: Color.white,
-    textAlign: "center",
+    textAlign: 'center',
   },
   searchContainer: {
     marginTop: 390, // Separating search bar from title
     alignItems: 'center',
     width: '100%',
     flexDirection: 'row',  // Allows the icon to appear next to the search bar
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   searchButton: {
+    alignItems: 'center',
+    backgroundColor: Color.white,
+    borderRadius: Border.br_sm,
+    elevation: 4,
+    flexDirection: 'row',
+    height: 62,
+    paddingLeft: Padding.p_sm,
+    paddingRight: 10,
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    shadowRadius: 4,
-    elevation: 4,
     shadowOpacity: 1,
-    borderRadius: Border.br_sm,
-    backgroundColor: Color.white,
+    shadowRadius: 4,
     width: 320,
-    height: 62,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingLeft: Padding.p_sm,
-    paddingRight: 10,
   },
   scanIconContainer: {
     position: 'absolute',
@@ -132,14 +132,14 @@ const styles = StyleSheet.create({
   },
   // Navigation button styles
   navButton: {
-    position: 'absolute',
-    bottom: 40,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
+    bottom: 40,
+    elevation: 5,
+    height: 40,
+    justifyContent: 'center',
+    position: 'absolute',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    width: 40,
   },
   navButtonLeft: {
     left: 30,
@@ -157,8 +157,8 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: Color.white,
-    fontSize: 20,
     fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 20,
   },
 });
 

@@ -66,21 +66,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,  // Adds padding for text alignment
   },
   laborText: {
+    color: Color.white,
+    position: 'absolute',
+    textAlign: 'left',
     transform: [
       {
         rotate: '-0.1deg',
       },
     ],
-    color: Color.white,
-    textAlign: 'left',
-    position: 'absolute',
   },
   laborTitle: {
-    top: 50,
+    fontFamily: FontFamily.sonder,
     fontSize: FontSize.size_77xl,
     lineHeight: 93,
-    fontFamily: FontFamily.sonder,
-    width: '90%',
     marginLeft: 20,
     marginTop: 40,
     textShadowColor: 'rgba(0, 0, 0, 0)',
@@ -89,32 +87,34 @@ const styles = StyleSheet.create({
       height: 4,
     },
     textShadowRadius: 4,
+    top: 50,
+    width: '90%',
   },
   weEvaluateHow: {
-    top: 180,
+    fontFamily: FontFamily.poppinsMedium,
     fontSize: 31,
     lineHeight: 58,
-    marginTop: 22,
     marginLeft: 20,
-    fontFamily: FontFamily.poppinsMedium, 
-    width: '85%',
-    textShadowColor: 'rgba(0, 0, 0, 0)',
+    marginTop: 22,
+    textShadowColor: 'rgba(0, 0, 0, 0)', 
     textShadowOffset: {
       width: 0,
       height: 4,
     },
     textShadowRadius: 4,
+    top: 180,
+    width: '85%',
   },
   // Navigation Button styles
   navButton: {
-    position: 'absolute',
-    bottom: 40,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
+    bottom: 40,
+    elevation: 5,
+    height: 40,
+    justifyContent: 'center',
+    position: 'absolute',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    width: 40,
   },
   navButtonLeft: {
     left: 30,  // Positioning for the back button on the left
@@ -132,8 +132,8 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: Color.white,
-    fontSize: 20,
     fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 20,
   },
 });
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
-import BaseQuestion from './BaseQuestion';
-import { Theme } from '../../../config/theme';
-import { MultiSelectQuestionPropTypes } from '../../../constants/propTypes';
+import BaseQuestion from 'components/Survey/QuestionTypes/BaseQuestion';
+import { Color, Padding, Border, FontFamily, FontSize } from 'GlobalStyles';
+import { MultiSelectQuestionPropTypes } from 'constants/propTypes';
 
 const MultiSelectQuestion = ({ question, value = [], onChange }) => {
   const handleSelect = (optionValue) => {
@@ -52,27 +52,27 @@ MultiSelectQuestion.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  optionsContainer: {
-    flexDirection: 'column',
-    gap: Theme.spacing.sm,
-  },
   option: {
-    padding: Theme.spacing.md,
-    borderRadius: Theme.borderRadius.small,
+    borderColor: Color.n400,
+    borderRadius: Border.br_sm,
     borderWidth: 1,
-    borderColor: Theme.colors.border,
-  },
-  selectedOption: {
-    backgroundColor: Theme.colors.primaryLight,
-    borderColor: Theme.colors.primary,
+    padding: Padding.p_md,
   },
   optionText: {
-    fontSize: 16,
-    color: Theme.colors.text,
-    fontFamily: Theme.fonts.medium,
+    color: Color.textPrimary,
+    fontFamily: FontFamily.poppinsMedium,
+    fontSize: FontSize.paragraphRegular_size,
+  },
+  optionsContainer: {
+    flexDirection: 'column',
+    gap: Padding.p_sm,
+  },
+  selectedOption: {
+    backgroundColor: Color.optionBackground,
+    borderColor: Color.primary,
   },
   selectedOptionText: {
-    color: Theme.colors.primary,
+    color: Color.primary,
   },
 });
 

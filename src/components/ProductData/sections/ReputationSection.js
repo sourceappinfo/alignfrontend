@@ -21,28 +21,28 @@ const ReputationSection = ({ reputationData }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
     backgroundColor: Color.white,
     borderRadius: 10,
     marginVertical: 8,
-  },
-  title: {
-    fontSize: FontSize.size_lg,
-    fontFamily: FontFamily.poppinsBold,
-    color: Color.primary,
-    marginBottom: 8,
+    padding: 16,
   },
   subTitle: {
-    fontSize: FontSize.size_md,
-    fontFamily: FontFamily.poppinsMedium,
     color: Color.secondary,
+    fontFamily: FontFamily.poppinsMedium,
+    fontSize: FontSize.size_md,
     marginTop: 8,
   },
   text: {
-    fontSize: FontSize.size_sm,
-    fontFamily: FontFamily.poppinsRegular,
     color: Color.text,
+    fontFamily: FontFamily.poppinsRegular,
+    fontSize: FontSize.size_sm,
     marginBottom: 4,
+  },
+  title: {
+    color: Color.primary,
+    fontFamily: FontFamily.poppinsBold,
+    fontSize: FontSize.size_lg,
+    marginBottom: 8,
   },
 });
 

@@ -54,36 +54,36 @@ ProgressBar.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: Theme.spacing.md,
-  },
-  progressBackground: {
-    height: 4,
-    backgroundColor: Theme.colors.border,
-    borderRadius: Theme.borderRadius.small,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: Theme.colors.primary,
-  },
-  sectionIndicators: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: Theme.spacing.sm,
-  },
-  sectionDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Theme.colors.border,
-  },
   activeDot: {
     backgroundColor: Theme.colors.primary,
     transform: [{ scale: 1.2 }],
   },
   completedDot: {
     backgroundColor: Theme.colors.primary,
+  },
+  container: {
+    padding: Theme.spacing.md,
+  },
+  progressBackground: {
+    backgroundColor: Theme.colors.border,
+    borderRadius: Theme.borderRadius.small,
+    height: 4,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    backgroundColor: Theme.colors.primary,
+    height: '100%',
+  },
+  sectionDot: {
+    backgroundColor: Theme.colors.border,
+    borderRadius: 4,
+    height: 8,
+    width: 8,
+  },
+  sectionIndicators: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: Theme.spacing.sm,
   },
 });
 

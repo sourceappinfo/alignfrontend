@@ -16,7 +16,7 @@ const NavigationButtons = ({ onNext, onPrevious, canGoNext, canGoPrevious, isLas
       />
     )}
     <Button
-      title={isLastSection ? "Finish" : "Next"}
+      title={isLastSection ? 'Finish' : 'Next'}
       onPress={onNext}
       disabled={!canGoNext}
       color={Theme.colors.primary}

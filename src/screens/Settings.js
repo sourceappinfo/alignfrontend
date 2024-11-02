@@ -1,7 +1,7 @@
-import React from "react";
-import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react-native";
+import React from 'react';
+import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Color, FontFamily, FontSize } from "GlobalStyles";
+import { Color, FontFamily, FontSize } from 'GlobalStyles';
 
 // Placeholder image
 const backgroundImage = require('assets/settings_background.jpg');  // Replace with actual image file
@@ -51,71 +51,71 @@ const Settings = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   backgroundImage: {
     flex: 1,
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',  // 30% opacity
+  container: {
+    flex: 1,
   },
   content: {
+    alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
     paddingHorizontal: 20,
   },
-  title: {
-    fontSize: 30,
-    fontFamily: FontFamily.ralewayBold,
-    color: Color.white,
-    marginBottom: 20,
-  },
   description: {
-    fontSize: 16,
-    fontFamily: FontFamily.ralewayMedium,
     color: Color.white,
+    fontFamily: FontFamily.ralewayMedium,
+    fontSize: 16,
     marginBottom: 30,
     textAlign: 'center',
   },
-  settingsOptions: {
-    width: '100%',
-    marginBottom: 40,
+  navButtonLeft: {
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
+    marginRight: 20,
+    padding: 10,
+  },
+  navButtonRight: {
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
+    marginLeft: 20,
+    padding: 10,
+  },
+  navButtonText: {
+    color: Color.white,
+    fontFamily: FontFamily.ralewayBold,
+    fontSize: 16,
+  },
+  navigation: {
+    flexDirection: 'row',
+    marginTop: 30,
   },
   optionButton: {
+    alignItems: 'center',
     backgroundColor: Color.primary,
-    padding: 15,
     borderRadius: 10,
     marginBottom: 10,
-    alignItems: 'center',
+    padding: 15,
   },
   optionText: {
     color: Color.white,
     fontFamily: FontFamily.ralewayMedium,
     fontSize: FontSize.size_md,
   },
-  navigation: {
-    flexDirection: 'row',
-    marginTop: 30,
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',  // 30% opacity
   },
-  navButtonLeft: {
-    marginRight: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    padding: 10,
-    borderRadius: 20,
+  settingsOptions: {
+    marginBottom: 40,
+    width: '100%',
   },
-  navButtonRight: {
-    marginLeft: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    padding: 10,
-    borderRadius: 20,
-  },
-  navButtonText: {
-    fontSize: 16,
+  title: {
     color: Color.white,
     fontFamily: FontFamily.ralewayBold,
+    fontSize: 30,
+    marginBottom: 20,
   },
 });
 

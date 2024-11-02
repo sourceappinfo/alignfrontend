@@ -1,7 +1,7 @@
-import * as React from "react";
-import { Image } from "expo-image";
-import { StyleSheet, Text, View } from "react-native";
-import { FontSize, FontFamily, Color } from "GlobalStyles";  // Use the alias 'GlobalStyles'
+import * as React from 'react';
+import { Image } from 'expo-image';
+import { StyleSheet, Text, View } from 'react-native';
+import { FontSize, FontFamily, Color } from 'GlobalStyles';  // Use the alias 'GlobalStyles'
 
 const Component = () => {
   return (
@@ -10,7 +10,7 @@ const Component = () => {
         <Image
           style={styles.ellipse}
           contentFit="cover"
-          source={require("assets/ellipse-2.png")}  // Use the 'assets' alias
+          source={require('assets/ellipse-2.png')}  // Use the 'assets' alias
         />
         <Text style={styles.text}>1</Text>
       </View>
@@ -18,7 +18,7 @@ const Component = () => {
         <Image
           style={styles.ellipse}
           contentFit="cover"
-          source={require("assets/ellipse-6.png")}  // Use the 'assets' alias
+          source={require('assets/ellipse-6.png')}  // Use the 'assets' alias
         />
         <Text style={styles.text}>5</Text>
       </View>
@@ -28,33 +28,33 @@ const Component = () => {
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
+    position: 'absolute',
     top: 972,
     left: 85,
     width: 160,
     height: 255,
-    flexDirection: "column", // Stack the ellipses vertically
-    justifyContent: "space-between", // Add space between them
-    alignItems: "center", // Center them horizontally
-  },
-  ellipseContainer: {
-    width: 26,
-    height: 24,
-    position: "relative", // Use relative positioning instead of absolute
+    flexDirection: 'column', // Stack the ellipses vertically
+    justifyContent: 'space-between', // Add space between them
+    alignItems: 'center', // Center them horizontally
   },
   ellipse: {
-    width: "100%",
-    height: "100%",
+    height: '100%',
+    width: '100%',
+  },
+  ellipseContainer: {
+    height: 24,
+    position: 'relative',
+    width: 26, // Use relative positioning instead of absolute
   },
   text: {
-    position: "absolute", // This keeps the text centered on the ellipse
+    position: 'absolute', // This keeps the text centered on the ellipse
     top: 3,
     left: 8,
     fontSize: FontSize.size_lg,
-    fontWeight: "700",
+    fontWeight: '700',
     fontFamily: FontFamily.overpassBold,
     color: Color.white,
-    textAlign: "center",
+    textAlign: 'center',
     width: 10,
     height: 11,
   },

@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Text, StyleSheet, View, ScrollView, ImageBackground, TouchableOpacity } from "react-native";
+import * as React from 'react';
+import { Text, StyleSheet, View, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { Color, FontFamily, FontSize, Border } from 'GlobalStyles'; // GlobalStyles without 'src' because of the alias
 import SwipeableScreenWrapper from 'components/SwipeableScreenWrapper'; // Using alias without 'src'
 
@@ -26,7 +26,7 @@ const Environment = ({ navigation }) => {
               CLIMATE
             </Text>
             <Text style={[styles.thisAssessesThe, styles.climateTransform]}>
-              {`This assesses the environmental footprint of a company's products and operations. We consider factors like:`}
+              {'This assesses the environmental footprint of a company\'s products and operations. We consider factors like:'}
             </Text>
 
             {/* Left-aligned and independent list items */}
@@ -71,20 +71,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20, // Adjust padding for content inside the ScrollView
   },
   climateTransform: {
+    color: Color.white,
+    textAlign: 'left',
     transform: [
       {
-        rotate: "-0.1deg",
+        rotate: '-0.1deg',
       },
     ],
-    textAlign: "left",
-    color: Color.white,
   },
   climate: {
-    fontSize: FontSize.size_77xl,
-    fontFamily: FontFamily.sonder,
     color: Color.white,
-    marginTop: 30,
-    marginBottom: 25, // Space between title and content
+    fontFamily: FontFamily.sonder,
+    fontSize: FontSize.size_77xl,
+    marginBottom: 25,
+    marginTop: 30, // Space between title and content
   },
   thisAssessesThe: {
     fontSize: 31,
@@ -114,14 +114,14 @@ const styles = StyleSheet.create({
   },
   // Navigation Button styles
   navButton: {
-    position: 'absolute',
-    bottom: 40,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
+    bottom: 40,
+    elevation: 5,
+    height: 40,
+    justifyContent: 'center',
+    position: 'absolute',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    width: 40,
   },
   navButtonLeft: {
     left: 30, // Positioning for the back button on the left
@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: Color.white,
-    fontSize: 20,
     fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 20,
   },
 });
 

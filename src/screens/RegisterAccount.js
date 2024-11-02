@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, StyleSheet, View, SafeAreaView, TouchableOpacity } from "react-native";
-import { Color, FontFamily } from "GlobalStyles";
+import { Text, StyleSheet, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Color, FontFamily } from 'GlobalStyles';
 import { useNavigation } from '@react-navigation/native';
 import { Video } from 'expo-av'; // Import Video component
 
@@ -27,7 +27,7 @@ const RegisterAccount = () => {
       <SafeAreaView style={styles.safeArea}>
         {/* Main Content */}
         <View style={styles.centerContent}>
-          <Text style={styles.alignText}>{`ALIGN.`}</Text>
+          <Text style={styles.alignText}>{'ALIGN.'}</Text>
           <Text style={styles.consciousText}>Conscious Consumption</Text>
         </View>
 
@@ -63,17 +63,49 @@ const RegisterAccount = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  alignText: {
+    color: Color.white,
+    fontFamily: FontFamily.sonder,
+    fontSize: 100,
+    lineHeight: 95,
+    marginLeft: 20,
+    position: 'absolute',
+    textAlign: 'center',
+    top: '35%',
+    width: '100%', 
   },
   background: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
     bottom: 0,
-    right: 0,
-    width: '100%',
     height: '100%',
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    width: '100%',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: 20,
+    width: '100%',
+  },
+  centerContent: {
+    alignItems: 'center',
+    flex: 1,
+    position: 'relative', 
+  },
+  consciousText: {
+    color: Color.white,
+    fontFamily: FontFamily.trispaceLight,
+    fontSize: 28,
+    lineHeight: 28,
+    position: 'absolute',
+    textAlign: 'center',
+    top: '48%',
+    width: '100%', 
+  },
+  container: {
+    flex: 1,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
@@ -81,49 +113,17 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-    justifyContent: "space-between", 
+    justifyContent: 'space-between', 
     paddingBottom: 50, 
   },
-  centerContent: {
-    flex: 1,
-    alignItems: "center",
-    position: 'relative', 
-  },
-  alignText: {
-    position: 'absolute',
-    fontSize: 100,
-    marginLeft: 20,
-    lineHeight: 95,
-    fontFamily: FontFamily.sonder,
-    textAlign: "center",
-    color: Color.white,
-    width: '100%',
-    top: '35%', 
-  },
-  consciousText: {
-    position: 'absolute',
-    fontSize: 28,
-    lineHeight: 28,
-    fontFamily: FontFamily.trispaceLight,
-    textAlign: "center",
-    color: Color.white,
-    width: '100%',
-    top: '48%', 
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    paddingHorizontal: 20,
-  },
   textButton: {
-    paddingVertical: 12,
     paddingHorizontal: 24,
+    paddingVertical: 12,
   },
   textButtonText: {
     color: Color.white,
-    fontSize: 16,
     fontFamily: FontFamily.ralewayMedium,
+    fontSize: 16,
     textDecorationLine: 'underline',
   },
 });

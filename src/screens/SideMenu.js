@@ -1,8 +1,8 @@
-import * as React from "react";
-import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react-native";
-import { Image } from "expo-image";
+import * as React from 'react';
+import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import { useNavigation } from '@react-navigation/native';  
-import { FontSize, Color, FontFamily, Border } from "../GlobalStyles";  
+import { FontSize, Color, FontFamily, Border } from '../GlobalStyles';  
 import { MaterialIcons, FontAwesome5, Ionicons } from '@expo/vector-icons';
 
 const SideMenu = () => {
@@ -11,7 +11,7 @@ const SideMenu = () => {
   return (
     <View style={styles.container}>
       <ImageBackground 
-        source={require("../assets/Side-Menu-Background.jpg")}
+        source={require('../assets/Side-Menu-Background.jpg')}
         style={styles.background} 
         resizeMode="cover"
       >
@@ -22,7 +22,7 @@ const SideMenu = () => {
             <Image
               style={styles.profilePicture}
               contentFit="cover"
-              source={require("../assets/profileicon.png")}
+              source={require('../assets/profileicon.png')}
             />
             {/* Edit Icon placed next to Profile Picture */}
             <TouchableOpacity 
@@ -101,86 +101,44 @@ const SideMenu = () => {
 };
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+  },
   container: {
     flex: 1,
   },
-  background: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-  },
-  sideMenu: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-  },
-  profileContainer: {
-    alignItems: 'center',
-    marginTop: 80,
-    position: 'relative',
-  },
-  profilePicture: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    borderWidth: 3,
-    borderColor: Color.white,
-  },
   editIconContainer: {
-    position: 'absolute',
-    top: 85,
-    right: -15,
     backgroundColor: 'rgba(255, 255, 255, 0.6)',
     borderRadius: 15,
     padding: 5,
-  },
-  userName: {
-    marginTop: 20,
-    fontSize: FontSize.size_xl,
-    fontFamily: FontFamily.ralewayMedium,
-    color: Color.white,
+    position: 'absolute',
+    right: -15,
+    top: 85,
   },
   menuContainer: {
     marginTop: 50,
     paddingLeft: 30,
   },
   menuItem: {
-    flexDirection: 'row',
     alignItems: 'center',
+    flexDirection: 'row',
     marginBottom: 20,
   },
   menuOption: {
-    fontSize: FontSize.paragraphRegular_size,
-    fontFamily: FontFamily.ralewayExtraBold,
     color: Color.white,
+    fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: FontSize.paragraphRegular_size,
     marginLeft: 10,
   },
-  signOutContainer: {
-    marginTop: 20,
-  },
-  signOut: {
-    color: Color.white,
-  },
-  navigationButtons: {
-    position: 'absolute',
-    bottom: 40,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 30,
-  },
   navButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
+    elevation: 5,
+    height: 40,
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -188,12 +146,54 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    width: 40,
   },
   navButtonText: {
     color: Color.white,
-    fontSize: 20,
     fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 20,
+  },
+  navigationButtons: {
+    bottom: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    left: 0,
+    paddingHorizontal: 30,
+    position: 'absolute',
+    right: 0,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+  },
+  profileContainer: {
+    alignItems: 'center',
+    marginTop: 80,
+    position: 'relative',
+  },
+  profilePicture: {
+    borderColor: Color.white,
+    borderRadius: 50,
+    borderWidth: 3,
+    height: 100,
+    width: 100,
+  },
+  sideMenu: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+  },
+  signOut: {
+    color: Color.white,
+  },
+  signOutContainer: {
+    marginTop: 20,
+  },
+  userName: {
+    color: Color.white,
+    fontFamily: FontFamily.ralewayMedium,
+    fontSize: FontSize.size_xl,
+    marginTop: 20,
   },
 });
 

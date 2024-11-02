@@ -1,7 +1,7 @@
-import React from "react";
-import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from "react-native";
+import React from 'react';
+import { Text, StyleSheet, View, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { FontSize, FontFamily, Color } from "GlobalStyles";
+import { FontSize, FontFamily, Color } from 'GlobalStyles';
 
 const backgroundImage = require('assets/green-tech-background.jpg'); // Placeholder image
 
@@ -36,39 +36,24 @@ const GreenTech = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   backgroundImage: {
     flex: 1,
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 40, 50, 0.3)', // 30% opacity
+  container: {
+    flex: 1,
   },
   content: {
+    alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
     paddingHorizontal: 30,
   },
-  title: {
-    fontSize: 40,
-    fontFamily: FontFamily.ralewayExtraBold,
-    color: Color.white,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
   description: {
-    fontSize: 16,
-    fontFamily: FontFamily.ralewayMedium,
     color: Color.white,
-    textAlign: 'center',
+    fontFamily: FontFamily.ralewayMedium,
+    fontSize: 16,
     marginBottom: 30,
-  },
-  navigation: {
-    flexDirection: 'row',
-    marginTop: 30,
+    textAlign: 'center',
   },
   navButtonLeft: {
     marginRight: 20,
@@ -77,9 +62,24 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   navButtonText: {
-    fontSize: 16,
     color: Color.white,
     fontFamily: FontFamily.ralewayBold,
+    fontSize: 16,
+  },
+  navigation: {
+    flexDirection: 'row',
+    marginTop: 30,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 40, 50, 0.3)', // 30% opacity
+  },
+  title: {
+    color: Color.white,
+    fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 40,
+    marginBottom: 20,
+    textAlign: 'center',
   },
 });
 

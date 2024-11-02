@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import { 
   Text, 
   StyleSheet, 
@@ -6,30 +6,30 @@ import {
   ImageBackground, 
   TouchableOpacity, 
   ActivityIndicator, 
-  Alert
-} from "react-native";
-import { TextInput as RNPTextInput } from "react-native-paper";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+  Alert,
+} from 'react-native';
+import { TextInput as RNPTextInput } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import { Color, Border, FontSize, FontFamily } from "GlobalStyles";
+import { Color, Border, FontSize, FontFamily } from 'GlobalStyles';
+import { auth } from '../services/api'; // Ensure this path matches your project structure
 
 const SignIn = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const [overlayOpacity, setOverlayOpacity] = useState(0.5);  // Adjustable overlay opacity
 
   const validateForm = () => {
     if (!email || !password) {
-      Alert.alert("Error", "Please fill in both email and password fields.");
+      Alert.alert('Error', 'Please fill in both email and password fields.');
       return false;
     }
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
-      Alert.alert("Error", "Please enter a valid email address.");
+      Alert.alert('Error', 'Please enter a valid email address.');
       return false;
     }
     return true;
@@ -39,12 +39,13 @@ const SignIn = () => {
     if (!validateForm()) return;
     setLoading(true);
     try {
-      const response = await axios.post('http://your-backend-url/api/auth/login', { email, password });
-      const { token } = response.data;
+      const response = await auth.login({ email, password });
+      const { token } = response;
       await AsyncStorage.setItem('token', token);
       navigation.replace('SideMenu'); // Navigate to SideMenu after login
     } catch (error) {
-      Alert.alert("Login Failed", "Invalid email or password.");
+      const errorMessage = error.response?.data?.error || 'Invalid email or password.';
+      Alert.alert('Login Failed', errorMessage);
     } finally {
       setLoading(false);
     }
@@ -61,7 +62,7 @@ const SignIn = () => {
   return (
     <View style={styles.container}>
       <ImageBackground 
-        source={require("assets/howlightpic.jpg")} // Background image
+        source={require('assets/howlightpic.jpg')} // Background image
         style={styles.background}
       >
         {/* Overlay with adjustable opacity */}
@@ -85,11 +86,11 @@ const SignIn = () => {
             onChangeText={setEmail}
             theme={{
               colors: { 
-                text: "#fff",
-                primary: "#fff",
+                text: '#fff',
+                primary: '#fff',
                 background: 'transparent',
-                placeholder: "rgba(255,255,255,0.7)",
-                outline: "rgba(255,255,255,0.7)",
+                placeholder: 'rgba(255,255,255,0.7)',
+                outline: 'rgba(255,255,255,0.7)',
               },
               roundness: 25,
             }}
@@ -109,11 +110,11 @@ const SignIn = () => {
             onChangeText={setPassword}
             theme={{
               colors: { 
-                text: "#fff",
-                primary: "#fff",
+                text: '#fff',
+                primary: '#fff',
                 background: 'transparent',
-                placeholder: "rgba(255,255,255,0.7)",
-                outline: "rgba(255,255,255,0.7)",
+                placeholder: 'rgba(255,255,255,0.7)',
+                outline: 'rgba(255,255,255,0.7)',
               },
               roundness: 25,
             }}
@@ -185,9 +186,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   background: {
+    alignItems: 'center',
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
   },
   // Overlay style with absolute positioning and adjustable background color
   overlay: {
@@ -197,15 +198,15 @@ const styles = StyleSheet.create({
   textContainer: {
     position: 'absolute',
     top: 250, // You can adjust this value to move it
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
   },
   helloAgain: {
-    fontSize: 65,
-    textTransform: "capitalize",
     fontFamily: FontFamily.sonder,
+    fontSize: 65,
+    textAlign: 'center',
+    textTransform: 'capitalize',
     width: 356,
-    textAlign: "center",
   },
   helloAgainClr: {
     color: Color.white,
@@ -213,15 +214,15 @@ const styles = StyleSheet.create({
   inputContainer: {
     position: 'absolute',
     top: 250, // Adjust to move input fields independently
-    width: "100%",
+    width: '100%',
     paddingHorizontal: 20,
   },
   input: {
-    height: 50,
-    borderRadius: 25,
-    paddingLeft: 10,
-    width: "100%",
     backgroundColor: 'transparent',
+    borderRadius: 25,
+    height: 50,
+    paddingLeft: 10,
+    width: '100%',
   },
   emailInput: {
     marginTop: 100,
@@ -242,38 +243,38 @@ const styles = StyleSheet.create({
   buttonContainer: {
     position: 'absolute',
     top: 520, // Adjust position of the buttons
-    width: "100%",
+    width: '100%',
     paddingHorizontal: 20,
-    alignItems: "center",
+    alignItems: 'center',
   },
   loginButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.3)', // Same as nav button background
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 25,
-    alignItems: "center",
-    width: "100%",
+    alignItems: 'center',
+    width: '100%',
   },
   createAccountButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.3)', // Same as nav button background
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 25,
-    alignItems: "center",
+    alignItems: 'center',
     marginTop: 60, // Adds space between buttons
-    width: "100%",
+    width: '100%',
   },
   buttonText: {
-    color: "#052B41",
+    color: '#052B41',
     fontFamily: FontFamily.ralewayExtraBold,
-    fontWeight: "800",
     fontSize: FontSize.size_lg,
+    fontWeight: '800',
   },
   createAccountText: {
-    color: "#052B41",
+    color: '#052B41',
     fontFamily: FontFamily.ralewayExtraBold,
-    fontWeight: "800",
     fontSize: FontSize.size_lg,
+    fontWeight: '800',
   },
   navButton: {
     position: 'absolute',
@@ -293,8 +294,8 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: Color.white,
-    fontSize: 20,
     fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 20,
   },
 });
 

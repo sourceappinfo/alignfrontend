@@ -39,35 +39,23 @@ const EthicalGadgets = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   backgroundImage: {
     flex: 1,
     justifyContent: 'center',
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 40, 50, 0.4)', // Adjust opacity here
+  container: {
+    flex: 1,
   },
   content: {
     alignItems: 'center',
     paddingHorizontal: 30,
   },
-  title: {
-    fontSize: FontSize.size_21xl,
-    fontFamily: FontFamily.sonder,
-    color: Color.white,
-    textAlign: 'center',
-    marginTop: 50, // Push the title upwards
-    marginBottom: 20,
-  },
   description: {
-    fontSize: FontSize.size_xl,
-    fontFamily: FontFamily.ralewayMedium,
     color: Color.white,
-    textAlign: 'center',
+    fontFamily: FontFamily.ralewayMedium,
+    fontSize: FontSize.size_xl,
     marginBottom: 40,
+    textAlign: 'center',
   },
   navButton: {
     position: 'absolute',
@@ -92,8 +80,20 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: Color.white,
-    fontSize: 20,
     fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 20,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 40, 50, 0.4)', // Adjust opacity here
+  },
+  title: {
+    fontSize: FontSize.size_21xl,
+    fontFamily: FontFamily.sonder,
+    color: Color.white,
+    textAlign: 'center',
+    marginTop: 50, // Push the title upwards
+    marginBottom: 20,
   },
 });
 

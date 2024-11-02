@@ -12,7 +12,7 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error("ErrorBoundary caught an error", error, errorInfo);
+    console.error('ErrorBoundary caught an error', error, errorInfo);
     // TODO: Implement error logging (e.g., Sentry)
   }
 
@@ -36,21 +36,21 @@ class ErrorBoundary extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
     padding: 16,
   },
-  errorText: {
-    fontSize: 18,
-    color: 'red',
-    marginBottom: 8,
-  },
   detailsText: {
-    fontSize: 14,
     color: 'gray',
+    fontSize: 14,
     marginBottom: 16,
     textAlign: 'center',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 18,
+    marginBottom: 8,
   },
 });
 

@@ -1,6 +1,6 @@
-import * as React from "react";
-import { Image, TouchableOpacity, Text, StyleSheet, View, ImageBackground, ScrollView } from "react-native";
-import { Padding, Color, Border, FontFamily, FontSize } from "GlobalStyles";
+import * as React from 'react';
+import { Image, TouchableOpacity, Text, StyleSheet, View, ImageBackground, ScrollView } from 'react-native';
+import { Padding, Color, Border, FontFamily, FontSize } from 'GlobalStyles';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons'; // For edit icon
 
@@ -19,7 +19,7 @@ const Profile = () => {
             <Image
               style={styles.profileImage}
               contentFit="cover"
-              source={require("assets/profileicon.png")}
+              source={require('assets/profileicon.png')}
             />
             {/* White edit icon positioned closer */}
             <TouchableOpacity 
@@ -93,32 +93,8 @@ const Profile = () => {
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
-    width: '100%',
     height: '100%',
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-  },
-  profileContent: {
-    alignItems: 'center',
-    paddingTop: 100,
-    paddingHorizontal: 20,
-    paddingBottom: 100, // To leave space for the navigation buttons
-  },
-  profileSection: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  profileImageContainer: {
-    position: 'relative',
-  },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 2,
-    borderColor: Color.white,
+    width: '100%',
   },
   editIconContainer: {
     position: 'absolute',
@@ -128,55 +104,36 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 5,
   },
-  userName: {
-    marginTop: 10,
-    fontSize: FontSize.size_xl,
-    fontFamily: FontFamily.ralewayMedium,
-    color: Color.white,
-  },
   fieldContainer: {
-    width: '100%',
     marginBottom: 20,
-  },
-  label: {
-    fontSize: FontSize.paragraphRegular_size,
-    fontFamily: FontFamily.ralewayMedium,
-    color: Color.white,
-    marginBottom: 5,
+    width: '100%',
   },
   inputBox: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: Border.br_sm,
-    paddingVertical: 10,
     paddingHorizontal: 15,
+    paddingVertical: 10,
   },
   inputText: {
     color: Color.white,
     fontFamily: FontFamily.poppinsMedium,
     fontSize: FontSize.size_md,
   },
-  saveButton: {
-    width: '100%',
-    backgroundColor: '#13557b',
-    borderRadius: 25,
-    paddingVertical: 10,
-    alignItems: 'center',
-    marginTop: 30,
-  },
-  saveButtonText: {
+  label: {
     color: Color.white,
-    fontFamily: FontFamily.ralewayExtraBold,
-    fontSize: FontSize.size_xl,
+    fontFamily: FontFamily.ralewayMedium,
+    fontSize: FontSize.paragraphRegular_size,
+    marginBottom: 5,
   },
   navButton: {
-    position: 'absolute',
-    bottom: 40,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
+    bottom: 40,
+    height: 40,
+    justifyContent: 'center',
+    position: 'absolute',
+    width: 40,
   },
   navButtonLeft: {
     left: 30,
@@ -186,8 +143,51 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: Color.white,
-    fontSize: 20,
     fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: 20,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+  },
+  profileContent: {
+    alignItems: 'center',
+    paddingBottom: 100,
+    paddingHorizontal: 20,
+    paddingTop: 100, // To leave space for the navigation buttons
+  },
+  profileImage: {
+    borderColor: Color.white,
+    borderRadius: 60,
+    borderWidth: 2,
+    height: 120,
+    width: 120,
+  },
+  profileImageContainer: {
+    position: 'relative',
+  },
+  profileSection: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  saveButton: {
+    alignItems: 'center',
+    backgroundColor: '#13557b',
+    borderRadius: 25,
+    marginTop: 30,
+    paddingVertical: 10,
+    width: '100%',
+  },
+  saveButtonText: {
+    color: Color.white,
+    fontFamily: FontFamily.ralewayExtraBold,
+    fontSize: FontSize.size_xl,
+  },
+  userName: {
+    color: Color.white,
+    fontFamily: FontFamily.ralewayMedium,
+    fontSize: FontSize.size_xl,
+    marginTop: 10,
   },
 });
 

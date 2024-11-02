@@ -25,36 +25,36 @@ const RecommendationsSection = ({ recommendations }) => {
 };
 
 const styles = StyleSheet.create({
+  companyName: {
+    color: Color.secondary,
+    fontFamily: FontFamily.poppinsMedium,
+    fontSize: FontSize.size_md,
+  },
   container: {
-    padding: 16,
     backgroundColor: Color.white,
     borderRadius: 10,
     marginVertical: 8,
-  },
-  title: {
-    fontSize: FontSize.size_lg,
-    fontFamily: FontFamily.poppinsBold,
-    color: Color.primary,
-    marginBottom: 8,
-  },
-  recommendationCard: {
-    backgroundColor: Color.lightBackground,
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  companyName: {
-    fontSize: FontSize.size_md,
-    fontFamily: FontFamily.poppinsMedium,
-    color: Color.secondary,
+    padding: 16,
   },
   description: {
-    fontSize: FontSize.size_sm,
-    fontFamily: FontFamily.poppinsRegular,
     color: Color.text,
+    fontFamily: FontFamily.poppinsRegular,
+    fontSize: FontSize.size_sm,
   },
   listContent: {
     paddingVertical: 8,
+  },
+  recommendationCard: {
+    backgroundColor: Color.lightBackground,
+    borderRadius: 8,
+    marginBottom: 8,
+    padding: 12,
+  },
+  title: {
+    color: Color.primary,
+    fontFamily: FontFamily.poppinsBold,
+    fontSize: FontSize.size_lg,
+    marginBottom: 8,
   },
 });
 

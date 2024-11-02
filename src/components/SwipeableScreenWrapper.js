@@ -1,30 +1,30 @@
-import React from "react";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import React from 'react';
+import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, { 
   useAnimatedGestureHandler, 
   useAnimatedStyle, 
   useSharedValue, 
-  withTiming 
-} from "react-native-reanimated";
+  withTiming, 
+} from 'react-native-reanimated';
 
 const SwipeableScreenWrapper = ({ children, onSwipeLeft, onSwipeRight, simultaneousHandlers }) => {
   const translateX = useSharedValue(0);
 
   const panGesture = useAnimatedGestureHandler({
     onStart: (event) => {
-      console.log("Gesture started:", event);
+      console.log('Gesture started:', event);
     },
     onActive: (event) => {
-      console.log("Gesture active:", event.translationX); // Debug log
+      console.log('Gesture active:', event.translationX); // Debug log
       translateX.value = event.translationX;
     },
     onEnd: (event) => {
-      console.log("Swipe detected:", event.translationX); // Debugging log
+      console.log('Swipe detected:', event.translationX); // Debugging log
       if (event.translationX < -30 && onSwipeLeft) { // Adjusted swipe sensitivity
-        console.log("Swiping left, calling onSwipeLeft");
+        console.log('Swiping left, calling onSwipeLeft');
         onSwipeLeft();
       } else if (event.translationX > 30 && onSwipeRight) {
-        console.log("Swiping right, calling onSwipeRight");
+        console.log('Swiping right, calling onSwipeRight');
         onSwipeRight();
       }
       translateX.value = withTiming(0);

@@ -35,18 +35,18 @@ const FinancialResponsibilitySection = ({ companyId }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
     backgroundColor: Color.background,
+    padding: 20,
   },
   header: {
-    fontSize: 22,
-    fontFamily: FontFamily.bold,
     color: Color.primary,
+    fontFamily: FontFamily.bold,
+    fontSize: 22,
   },
   info: {
-    fontSize: 16,
-    fontFamily: FontFamily.regular,
     color: Color.text,
+    fontFamily: FontFamily.regular,
+    fontSize: 16,
     marginVertical: 4,
   },
 });

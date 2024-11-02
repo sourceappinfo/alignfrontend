@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Expo
+.expo/
+.expo-shared/
+web-build/
+
+# Config files
+*.config.js
+app.json
+metro.config.*
+babel.config.*
+
+# Assets
+/assets/
+/src/assets/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ttf
+*.svg
+
+# Build
+dist/
+build/
+web-build/
+
+# Cache
+.cache/
+.expo/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.*
